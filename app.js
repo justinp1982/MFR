@@ -2,7 +2,7 @@ console.log("MFR Tool Loaded.");
 
 // --- STATE MANAGEMENT ---
 const state = {
-    selectedMuscles: [], // Array to hold clicked muscles
+    selectedMuscles: [], 
     notes: ""
 };
 
@@ -52,19 +52,25 @@ function removeMuscleFromState(muscle) {
 // --- UI UPDATES ---
 function updateInputPanel(lastClickedMuscle) {
     const container = document.getElementById('form-container');
-    // Simple feedback for now
+    
+    // Check if we have muscles selected
+    if (state.selectedMuscles.length === 0) {
+        container.innerHTML = `<p class="instruction">Select a body part to begin.</p>`;
+        return;
+    }
+
     container.innerHTML = `
-        <h3>Treating: ${lastClickedMuscle}</h3>
+        <h3>Last Selected: ${lastClickedMuscle}</h3>
         <p><strong>CPT Code:</strong> 97140 (Manual Therapy)</p>
         <label>Technique:</label>
-        <select id="technique-select" onchange="generateSOAP()">
+        <select id="technique-select" onchange="generateSOAP()" style="width: 100%; padding: 8px; margin-bottom: 10px;">
             <option>Myofascial Release</option>
             <option>Trigger Point Release</option>
             <option>Soft Tissue Mobilization</option>
         </select>
-        <br><br>
+        
         <label>Patient Response:</label>
-        <select id="response-select" onchange="generateSOAP()">
+        <select id="response-select" onchange="generateSOAP()" style="width: 100%; padding: 8px; margin-bottom: 10px;">
             <option>Tolerated well</option>
             <option>Reported decreased pain</option>
             <option>Improved ROM</option>
@@ -80,8 +86,12 @@ function generateSOAP() {
     }
 
     const musclesList = state.selectedMuscles.join(", ");
-    const technique = document.getElementById('technique-select') ? document.getElementById('technique-select').value : "Myofascial Release";
-    const response = document.getElementById('response-select') ? document.getElementById('response-select').value : "Tolerated well";
+    // Safely get values, default if element doesn't exist yet
+    const techniqueElem = document.getElementById('technique-select');
+    const responseElem = document.getElementById('response-select');
+    
+    const technique = techniqueElem ? techniqueElem.value : "Myofascial Release";
+    const response = responseElem ? responseElem.value : "Tolerated well";
 
     const note = `SOAP NOTE (Draft)
 DATE: ${new Date().toLocaleDateString()}
@@ -99,7 +109,7 @@ Continue plan of care focusing on ${musclesList} to restore mobility.`;
     document.getElementById('soap-preview').value = note;
 }
 
-// Keep the Copy button logic
+// Copy Button Logic
 document.getElementById('btn-copy').addEventListener('click', () => {
     const noteContent = document.getElementById('soap-preview').value;
     if(noteContent) {
