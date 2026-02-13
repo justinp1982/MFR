@@ -4,7 +4,6 @@ console.log("MFR Tool Loaded.");
 const currentUser = { id: "local-user-001", plan: "pro" };
 
 // --- STATE MANAGEMENT ---
-// Default State
 const defaultState = {
     mode: 'treatment', 
     painMuscles: [],
@@ -16,7 +15,6 @@ const defaultState = {
 let state = JSON.parse(localStorage.getItem('mfr_session_state')) || { ...defaultState };
 
 // --- INIT ---
-// Run on load to restore the UI if data exists
 window.addEventListener('DOMContentLoaded', () => {
     restoreUI();
     generateSOAP();
@@ -29,22 +27,14 @@ function saveState() {
 }
 
 function restoreUI() {
-    // Restore Mode
     setMode(state.mode);
-
-    // Restore Muscles Visuals
-    // Clear all first
-    document.querySelectorAll('.muscle-zone').forEach(el => {
-        el.classList.remove('pain', 'treated', 'selected');
-    });
-
-    // Re-apply Pain (Red)
+    // Clear
+    document.querySelectorAll('.muscle-zone').forEach(el => el.classList.remove('pain', 'treated'));
+    // Restore
     state.painMuscles.forEach(name => {
         const el = document.querySelector(`.muscle-zone[data-name="${name}"]`);
         if(el) el.classList.add('pain');
     });
-
-    // Re-apply Treated (Green)
     state.treatedMuscles.forEach(name => {
         const el = document.querySelector(`.muscle-zone[data-name="${name}"]`);
         if(el) el.classList.add('treated');
@@ -54,35 +44,28 @@ function restoreUI() {
 // --- NEW SESSION (RESET) ---
 document.getElementById('btn-reset').addEventListener('click', () => {
     if(confirm("Start a new patient session? This will clear current data.")) {
-        state = { ...defaultState }; // Reset state object
-        state.painMuscles = []; // Ensure arrays are empty
+        state = { ...defaultState };
+        state.painMuscles = [];
         state.treatedMuscles = [];
-        
-        saveState(); // Clear storage
-        restoreUI(); // Clear visuals
-        generateSOAP(); // Clear text
-        renderSuperbill(); // Clear table
-        
-        // Reset Inputs
+        saveState();
+        restoreUI();
+        generateSOAP();
+        renderSuperbill();
         document.getElementById('form-container').innerHTML = '<p class="instruction">Select a body part to begin.</p>';
     }
 });
 
-// --- MODE SWITCHING ---
+// --- CONTROLS ---
 function setMode(newMode) {
     state.mode = newMode;
-    saveState(); // Save preference
-    
-    // Update UI Buttons
+    saveState();
     document.getElementById('btn-mode-assess').classList.toggle('active', newMode === 'assessment');
     document.getElementById('btn-mode-treat').classList.toggle('active', newMode === 'treatment');
 }
 
-// --- VIEW TOGGLING ---
 function switchView(viewName) {
     const frontView = document.getElementById('view-front');
     const backView = document.getElementById('view-back');
-
     if(viewName === 'front') {
         frontView.classList.remove('hidden');
         backView.classList.add('hidden');
@@ -92,8 +75,7 @@ function switchView(viewName) {
     }
 }
 
-// --- TAB SWITCHING ---
-window.switchTab = function(tabName) { // Made global for HTML access
+window.switchTab = function(tabName) {
     const soapView = document.getElementById('soap-preview');
     const billView = document.getElementById('superbill-view');
     const tabSoap = document.getElementById('tab-soap');
@@ -113,7 +95,7 @@ window.switchTab = function(tabName) { // Made global for HTML access
     }
 }
 
-// --- INTERACTION LOGIC ---
+// --- INTERACTION ---
 document.querySelectorAll('.muscle-zone').forEach(zone => {
     zone.addEventListener('click', function() {
         const muscleName = this.getAttribute('data-name');
@@ -136,12 +118,9 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
             }
         }
 
-        // Green wins visually
-        if (state.treatedMuscles.includes(muscleName)) {
-            this.classList.add('treated');
-        }
+        if (state.treatedMuscles.includes(muscleName)) this.classList.add('treated');
 
-        saveState(); // <--- CRITICAL: Save after every click
+        saveState();
         updateInputPanel(muscleName);
         generateSOAP();
         if(!document.getElementById('superbill-view').classList.contains('hidden')) {
@@ -150,10 +129,8 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
     });
 });
 
-// --- UI UPDATES ---
 function updateInputPanel(lastClickedMuscle) {
     const container = document.getElementById('form-container');
-    
     let statusText = "";
     if (state.painMuscles.includes(lastClickedMuscle)) statusText += "🔴 Reported Pain. ";
     if (state.treatedMuscles.includes(lastClickedMuscle)) statusText += "🟢 Treated.";
@@ -178,7 +155,6 @@ function updateInputPanel(lastClickedMuscle) {
     `;
 }
 
-// --- SOAP GENERATOR ---
 function generateSOAP() {
     const techniqueElem = document.getElementById('technique-select');
     const responseElem = document.getElementById('response-select');
@@ -209,7 +185,6 @@ Continue plan of care focusing on ${painList} to restore mobility.`;
     document.getElementById('soap-preview').value = note;
 }
 
-// --- SUPERBILL RENDERER ---
 function renderSuperbill() {
     const tbody = document.querySelector('#billing-table tbody');
     if (!tbody) return; 
@@ -227,7 +202,6 @@ function renderSuperbill() {
     });
 }
 
-// Copy Button Logic
 document.getElementById('btn-copy').addEventListener('click', () => {
     const soapActive = !document.getElementById('soap-preview').classList.contains('hidden');
     if (soapActive) {
