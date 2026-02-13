@@ -1,10 +1,31 @@
 console.log("MFR Tool Loaded.");
 
+// [FUTURE-SECURITY]
+// Line 4: Placeholder for User Authentication Object
+// In the SaaS version, this will be populated by the Auth Provider (e.g., Supabase.auth.user())
+// If currentUser is null, the app should redirect to the login screen.
+const currentUser = {
+    id: "local-user-001", // Hardcoded for PoC
+    plan: "pro",
+    preferences: {} 
+};
+
 // --- STATE MANAGEMENT ---
 const state = {
     selectedMuscles: [], 
     notes: ""
 };
+
+// [FUTURE-SECURITY]
+// Line 18: Initialization Check
+// Use this function to verify if the user has a valid session token before loading data.
+function checkAuth() {
+    if (!currentUser.id) {
+        console.warn("No user logged in. Redirecting...");
+        // window.location.href = "/login.html";
+    }
+}
+checkAuth();
 
 // --- VIEW TOGGLING ---
 function switchView(viewName) {
@@ -21,15 +42,11 @@ function switchView(viewName) {
 }
 
 // --- INTERACTION LOGIC ---
-// Add click listeners to all muscle zones
 document.querySelectorAll('.muscle-zone').forEach(zone => {
     zone.addEventListener('click', function() {
-        // Toggle the visual class
         this.classList.toggle('selected');
-        
         const muscleName = this.getAttribute('data-name');
         
-        // Logic to Add/Remove from state
         if (this.classList.contains('selected')) {
             addMuscleToState(muscleName);
         } else {
@@ -40,8 +57,8 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
 
 function addMuscleToState(muscle) {
     state.selectedMuscles.push(muscle);
-    updateInputPanel(muscle); // Focus on this muscle in the middle panel
-    generateSOAP(); // Update the text note
+    updateInputPanel(muscle);
+    generateSOAP();
 }
 
 function removeMuscleFromState(muscle) {
@@ -53,7 +70,6 @@ function removeMuscleFromState(muscle) {
 function updateInputPanel(lastClickedMuscle) {
     const container = document.getElementById('form-container');
     
-    // Check if we have muscles selected
     if (state.selectedMuscles.length === 0) {
         container.innerHTML = `<p class="instruction">Select a body part to begin.</p>`;
         return;
@@ -78,7 +94,7 @@ function updateInputPanel(lastClickedMuscle) {
     `;
 }
 
-// --- SOAP GENERATOR (The "Engine") ---
+// --- SOAP GENERATOR ---
 function generateSOAP() {
     if (state.selectedMuscles.length === 0) {
         document.getElementById('soap-preview').value = "";
@@ -86,13 +102,16 @@ function generateSOAP() {
     }
 
     const musclesList = state.selectedMuscles.join(", ");
-    // Safely get values, default if element doesn't exist yet
     const techniqueElem = document.getElementById('technique-select');
     const responseElem = document.getElementById('response-select');
     
     const technique = techniqueElem ? techniqueElem.value : "Myofascial Release";
     const response = responseElem ? responseElem.value : "Tolerated well";
 
+    // [FUTURE-SECURITY]
+    // Line 98: Privacy / Scrubbing
+    // Before saving or transmitting this string, ensure no PII (Patient Identifiable Info)
+    // is included if the user is on a non-HIPAA compliant tier.
     const note = `SOAP NOTE (Draft)
 DATE: ${new Date().toLocaleDateString()}
 
