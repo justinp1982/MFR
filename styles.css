@@ -2,9 +2,9 @@
     --bg-color: #f4f4f9;
     --panel-bg: #ffffff;
     --primary: #2c3e50;
-    --accent: #3498db;     /* Treatment Blue/Green */
-    --pain: #e74c3c;       /* Pain Red */
-    --treated: #2ecc71;    /* Treated Green */
+    --accent: #3498db;
+    --pain: #e74c3c;       /* Red */
+    --treated: #2ecc71;    /* Green */
     --border: #e0e0e0;
 }
 
@@ -13,10 +13,11 @@ body {
     background-color: var(--bg-color);
     margin: 0;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden; /* Desktop: prevent body scroll */
 }
+
+/* Header (Hidden on Desktop) */
+.app-header { display: none; }
 
 .container {
     display: grid;
@@ -24,6 +25,7 @@ body {
     gap: 20px;
     width: 95%;
     height: 90vh;
+    margin: 20px auto;
 }
 
 section {
@@ -33,9 +35,18 @@ section {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
+    overflow-y: auto; /* Internal scroll */
 }
 
 h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 10px;}
+
+/* Panel Headers */
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.mode-controls { display: flex; gap: 5px; }
+.mode-btn { font-size: 0.8rem; padding: 5px 10px; opacity: 0.6; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: white;}
+.mode-btn.active { opacity: 1; font-weight: bold; border: 2px solid #333; color: white; }
+#btn-mode-assess.active { background-color: var(--pain); border-color: #c0392b; }
+#btn-mode-treat.active { background-color: var(--treated); border-color: #27ae60; }
 
 #svg-container {
     flex-grow: 1;
@@ -46,97 +57,73 @@ h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px
     border-radius: 4px;
     margin-bottom: 10px;
     border: 1px solid #eee;
+    min-height: 300px;
 }
+svg { width: 100%; height: 100%; }
 
-/* --- Mode Controls --- */
-.mode-controls {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 10px;
-}
-.mode-btn {
-    flex: 1;
-    font-size: 0.9rem;
-    opacity: 0.6;
-}
-.mode-btn.active {
-    opacity: 1;
-    border: 2px solid var(--primary);
-}
-#btn-mode-assess.active { background-color: var(--pain); color: white; border-color: #c0392b; }
-#btn-mode-treat.active { background-color: var(--treated); color: white; border-color: #27ae60; }
+/* Muscles */
+.muscle-zone { fill: #bdc3c7; stroke: #fff; stroke-width: 2px; transition: all 0.2s; cursor: pointer; }
+.muscle-zone:hover { fill: #95a5a6; transform: scale(1.01); }
+.muscle-zone.pain { fill: var(--pain); }
+.muscle-zone.treated { fill: var(--treated); stroke: #27ae60; }
 
+.view-controls { display: flex; gap: 10px; }
+.view-controls button { flex: 1; padding: 8px; cursor: pointer; }
+.active-view { background-color: var(--primary); color: white; font-weight: bold; border: none; border-radius: 4px;}
 
-/* --- SVG Interactive Styles --- */
-.muscle-zone {
-    fill: #bdc3c7;
-    stroke: #ffffff;
-    stroke-width: 2px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.muscle-zone:hover {
-    fill: #95a5a6;
-    transform: scale(1.01); 
-}
-
-/* Pain State (Red) */
-.muscle-zone.pain {
-    fill: var(--pain);
-}
-
-/* Treated State (Green) - Defined Last to Override Pain visually */
-.muscle-zone.treated {
-    fill: var(--treated);
-    stroke: #27ae60;
-}
-
-/* --- Output Panel & Tabs --- */
+/* Output */
 .output-tabs { display: flex; gap: 5px; margin-bottom: 10px; }
-.tab { flex: 1; background: #eee; color: #666; font-weight: normal; }
+.tab { flex: 1; padding: 8px; border: none; cursor: pointer; background: #eee; }
 .tab.active { background: var(--primary); color: white; font-weight: bold; }
 
-#soap-preview {
-    flex-grow: 1;
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    resize: none;
-    font-family: monospace;
-    padding: 10px;
-    box-sizing: border-box;
-}
+#soap-preview { flex-grow: 1; width: 100%; border: 1px solid var(--border); border-radius: 4px; resize: none; font-family: monospace; padding: 10px; }
 
-/* Billing Table */
-#billing-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-#billing-table th, #billing-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    font-size: 0.9rem;
-}
+#billing-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+#billing-table th, #billing-table td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 0.9rem; }
 #billing-table th { background-color: #f2f2f2; }
 
-.action-buttons {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-}
+/* Buttons */
+.grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+button { padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
+.primary-btn { background-color: var(--accent); }
+.secondary-btn { background-color: var(--primary); }
+.danger-btn { background-color: #c0392b; }
+.icon-btn { background: none; color: #333; font-size: 1.5rem; padding: 0; }
 
-button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.primary-btn { background-color: var(--accent); color: white; flex-grow: 1;}
-.secondary-btn { background-color: var(--primary); color: white; }
-.view-controls { display: flex; gap: 10px; justify-content: center; }
 .hidden { display: none !important; }
+
+/* Modal */
+.modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 20px; border-radius: 8px; width: 300px; max-width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.close-btn { background: none; color: #333; font-size: 1.5rem; padding: 0; }
+.setting-input { width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+
+/* --- MOBILE ERGONOMICS (The Jim Special) --- */
+@media (max-width: 768px) {
+    body { height: auto; overflow: auto; padding: 10px; }
+    
+    .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    h1 { margin: 0; font-size: 1.5rem; color: var(--primary); }
+
+    .container {
+        display: flex;
+        flex-direction: column; /* Stack vertically */
+        height: auto;
+        gap: 15px;
+        width: 100%;
+        margin: 0;
+    }
+
+    #body-map-panel {
+        height: 60vh; /* Map takes priority */
+        order: 1;
+    }
+    
+    #input-panel { order: 2; }
+    #output-panel { order: 3; }
+
+    /* Larger touch targets */
+    button { padding: 15px; font-size: 1rem; } 
+    .muscle-zone { stroke-width: 3px; }
+}
