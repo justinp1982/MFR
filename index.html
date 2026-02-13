@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFR Rapid Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <section id="body-map-panel">
+            <h2>1. Select Area</h2>
+            <div id="svg-container">
+                <p class="placeholder-text">Body Map Loading...</p>
+            </div>
+            <div class="view-controls">
+                <button onclick="switchView('front')">Front</button>
+                <button onclick="switchView('back')">Back</button>
+            </div>
+        </section>
+
+        <section id="input-panel">
+            <h2>2. Treatment Details</h2>
+            <div id="form-container">
+                <p class="instruction">Select a body part to begin.</p>
+                </div>
+        </section>
+
+        <section id="output-panel">
+            <h2>3. Output</h2>
+            <div class="output-tabs">
+                <button class="active">SOAP Note</button>
+                <button>Superbill Data</button>
+            </div>
+            <textarea id="soap-preview" readonly placeholder="Notes will auto-generate here..."></textarea>
+            
+            <div class="action-buttons">
+                <button id="btn-copy" class="primary-btn">Copy to Clipboard</button>
+                <button id="btn-pdf" class="secondary-btn">Generate PDF</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
