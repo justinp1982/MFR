@@ -2,7 +2,9 @@
     --bg-color: #f4f4f9;
     --panel-bg: #ffffff;
     --primary: #2c3e50;
-    --accent: #3498db;
+    --accent: #3498db;     /* Treatment Blue/Green */
+    --pain: #e74c3c;       /* Pain Red */
+    --treated: #2ecc71;    /* Treated Green */
     --border: #e0e0e0;
 }
 
@@ -46,6 +48,55 @@ h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px
     border: 1px solid #eee;
 }
 
+/* --- Mode Controls --- */
+.mode-controls {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+.mode-btn {
+    flex: 1;
+    font-size: 0.9rem;
+    opacity: 0.6;
+}
+.mode-btn.active {
+    opacity: 1;
+    border: 2px solid var(--primary);
+}
+#btn-mode-assess.active { background-color: var(--pain); color: white; border-color: #c0392b; }
+#btn-mode-treat.active { background-color: var(--treated); color: white; border-color: #27ae60; }
+
+
+/* --- SVG Interactive Styles --- */
+.muscle-zone {
+    fill: #bdc3c7;
+    stroke: #ffffff;
+    stroke-width: 2px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.muscle-zone:hover {
+    fill: #95a5a6;
+    transform: scale(1.01); 
+}
+
+/* Pain State (Red) */
+.muscle-zone.pain {
+    fill: var(--pain);
+}
+
+/* Treated State (Green) - Defined Last to Override Pain visually */
+.muscle-zone.treated {
+    fill: var(--treated);
+    stroke: #27ae60;
+}
+
+/* --- Output Panel & Tabs --- */
+.output-tabs { display: flex; gap: 5px; margin-bottom: 10px; }
+.tab { flex: 1; background: #eee; color: #666; font-weight: normal; }
+.tab.active { background: var(--primary); color: white; font-weight: bold; }
+
 #soap-preview {
     flex-grow: 1;
     width: 100%;
@@ -56,6 +107,20 @@ h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px
     padding: 10px;
     box-sizing: border-box;
 }
+
+/* Billing Table */
+#billing-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+#billing-table th, #billing-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+#billing-table th { background-color: #f2f2f2; }
 
 .action-buttons {
     margin-top: 10px;
@@ -74,26 +139,4 @@ button {
 .primary-btn { background-color: var(--accent); color: white; flex-grow: 1;}
 .secondary-btn { background-color: var(--primary); color: white; }
 .view-controls { display: flex; gap: 10px; justify-content: center; }
-
-/* --- SVG Interactive Styles --- */
-.muscle-zone {
-    fill: #bdc3c7;
-    stroke: #ffffff;
-    stroke-width: 2px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.muscle-zone:hover {
-    fill: #95a5a6;
-    transform: scale(1.01); 
-}
-
-.muscle-zone.selected {
-    fill: #2ecc71;
-    stroke: #27ae60;
-}
-
-.hidden {
-    display: none;
-}
+.hidden { display: none !important; }
