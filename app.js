@@ -1,20 +1,24 @@
-console.log("MFR Tool Loaded (v1.6 Buttons).");
-
-// [FUTURE-SECURITY] User Auth Placeholder
-const currentUser = { id: "local-user-001", plan: "pro" };
+console.log("MFR Tool Loaded (v1.7 Voice Settings).");
 
 // --- STATE MANAGEMENT ---
 const defaultState = {
     mode: 'treatment', 
     painMuscles: [],
     treatedMuscles: [],
-    technique: "Myofascial Release", // New Global Default
-    response: "Tolerated well",      // New Global Default
+    technique: "Myofascial Release", 
+    response: "Tolerated well",
     notes: ""
 };
 
-// Load from LocalStorage OR use Default
+// Default Voice Settings
+const defaultSettings = {
+    intro: "Patient presents for manual therapy session.",
+    pain: "Areas of pain/restriction identified:"
+};
+
+// Load State & Settings
 let state = JSON.parse(localStorage.getItem('mfr_session_state')) || { ...defaultState };
+let settings = JSON.parse(localStorage.getItem('mfr_settings')) || { ...defaultSettings };
 
 // --- INIT ---
 window.addEventListener('DOMContentLoaded', () => {
@@ -29,8 +33,10 @@ function saveState() {
 
 function restoreUI() {
     setMode(state.mode);
+    
     // Clear Visuals
     document.querySelectorAll('.muscle-zone').forEach(el => el.classList.remove('pain', 'treated'));
+    
     // Restore Visuals
     state.painMuscles.forEach(name => {
         const el = document.querySelector(`.muscle-zone[data-name="${name}"]`);
@@ -46,7 +52,6 @@ function restoreUI() {
 document.getElementById('btn-reset').addEventListener('click', () => {
     if(confirm("Start a new patient session? This will clear current data.")) {
         state = { ...defaultState };
-        // Explicit reset of arrays
         state.painMuscles = [];
         state.treatedMuscles = [];
         
@@ -58,15 +63,41 @@ document.getElementById('btn-reset').addEventListener('click', () => {
     }
 });
 
+// --- SETTINGS (Therapist Voice) ---
+document.getElementById('btn-settings').addEventListener('click', () => {
+    toggleSettings();
+});
+
+window.toggleSettings = function() {
+    const modal = document.getElementById('settings-modal');
+    modal.classList.toggle('hidden');
+    
+    if(!modal.classList.contains('hidden')) {
+        // Load current values into inputs
+        document.getElementById('set-sub').value = settings.intro;
+        document.getElementById('set-pain').value = settings.pain;
+    }
+}
+
+window.saveSettings = function() {
+    settings.intro = document.getElementById('set-sub').value;
+    settings.pain = document.getElementById('set-pain').value;
+    
+    localStorage.setItem('mfr_settings', JSON.stringify(settings));
+    toggleSettings(); // Close modal
+    generateSOAP(); // Regenerate note with new voice
+}
+
+
 // --- CONTROLS ---
-function setMode(newMode) {
+window.setMode = function(newMode) {
     state.mode = newMode;
     saveState();
     document.getElementById('btn-mode-assess').classList.toggle('active', newMode === 'assessment');
     document.getElementById('btn-mode-treat').classList.toggle('active', newMode === 'treatment');
 }
 
-function switchView(viewName) {
+window.switchView = function(viewName) {
     const frontView = document.getElementById('view-front');
     const backView = document.getElementById('view-back');
     if(viewName === 'front') {
@@ -132,24 +163,21 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
     });
 });
 
-// --- DYNAMIC INPUT PANEL (Now with Buttons) ---
+// --- DYNAMIC INPUT PANEL ---
 function updateInputPanel(lastClickedMuscle) {
     const container = document.getElementById('form-container');
     
-    // Status Logic
     let statusText = "";
     if (state.painMuscles.includes(lastClickedMuscle)) statusText += "🔴 Reported Pain. ";
     if (state.treatedMuscles.includes(lastClickedMuscle)) statusText += "🟢 Treated.";
 
-    // Options Arrays
     const techniques = ["Myofascial Release", "Trigger Point", "Soft Tissue Mob"];
     const responses = ["Tolerated well", "Decreased Pain", "Improved ROM"];
 
-    // Helper to create button group HTML
     const createButtons = (items, currentVal, type) => {
         return items.map(item => {
             const isActive = item === currentVal ? 'active' : '';
-            return `<button class="chip-btn ${isActive}" onclick="setGlobalOption('${type}', '${item}', '${lastClickedMuscle}')">${item}</button>`;
+            return `<button class="chip-btn ${isActive}" onclick="window.setGlobalOption('${type}', '${item}', '${lastClickedMuscle}')">${item}</button>`;
         }).join('');
     };
 
@@ -170,27 +198,27 @@ function updateInputPanel(lastClickedMuscle) {
     `;
 }
 
-// --- NEW FUNCTION: Handle Button Clicks ---
 window.setGlobalOption = function(type, value, muscleContext) {
-    // Update State
     if (type === 'technique') state.technique = value;
     if (type === 'response') state.response = value;
     
     saveState();
-    updateInputPanel(muscleContext); // Re-render buttons to show active state
-    generateSOAP(); // Update Text
+    updateInputPanel(muscleContext);
+    generateSOAP(); 
 };
 
+// --- SOAP GENERATOR (Using Custom Settings) ---
 function generateSOAP() {
     const painList = state.painMuscles.length > 0 ? state.painMuscles.join(", ") : "None reported";
     const treatedList = state.treatedMuscles.length > 0 ? state.treatedMuscles.join(", ") : "None";
 
+    // Use settings variables instead of hardcoded strings
     const note = `SOAP NOTE (Draft)
 DATE: ${new Date().toLocaleDateString()}
 
 SUBJECTIVE:
-Patient presents for manual therapy.
-Areas of pain/restriction identified: ${painList}.
+${settings.intro}
+${settings.pain} ${painList}.
 
 OBJECTIVE:
 Manual therapy (CPT 97140) performed.
