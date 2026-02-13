@@ -35,7 +35,6 @@ section {
 
 h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 10px;}
 
-/* SVG Container */
 #svg-container {
     flex-grow: 1;
     background: #ffffff;
@@ -47,7 +46,6 @@ h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px
     border: 1px solid #eee;
 }
 
-/* Output Area */
 #soap-preview {
     flex-grow: 1;
     width: 100%;
@@ -78,29 +76,24 @@ button {
 .view-controls { display: flex; gap: 10px; justify-content: center; }
 
 /* --- SVG Interactive Styles --- */
-
-/* The Muscle/Zone Groups */
 .muscle-zone {
-    fill: #bdc3c7;      /* Default Grey */
-    stroke: #ffffff;    /* White borders */
+    fill: #bdc3c7;
+    stroke: #ffffff;
     stroke-width: 2px;
     transition: all 0.2s ease;
     cursor: pointer;
 }
 
-/* Hover Effect */
 .muscle-zone:hover {
     fill: #95a5a6;
     transform: scale(1.01); 
 }
 
-/* Selected State (The "Treated" Look - Green) */
 .muscle-zone.selected {
-    fill: #2ecc71;      /* Green */
+    fill: #2ecc71;
     stroke: #27ae60;
 }
 
-/* Hidden View Logic */
 .hidden {
     display: none;
 }
