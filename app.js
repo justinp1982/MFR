@@ -1,20 +1,77 @@
 console.log("MFR Tool Loaded.");
 
-// [FUTURE-SECURITY] Placeholder for User Auth
+// [FUTURE-SECURITY] User Auth Placeholder
 const currentUser = { id: "local-user-001", plan: "pro" };
 
 // --- STATE MANAGEMENT ---
-// Updated to track Pain vs Treated separately
-const state = {
-    mode: 'treatment', // 'assessment' or 'treatment'
+// Default State
+const defaultState = {
+    mode: 'treatment', 
     painMuscles: [],
     treatedMuscles: [],
     notes: ""
 };
 
+// Load from LocalStorage OR use Default
+let state = JSON.parse(localStorage.getItem('mfr_session_state')) || { ...defaultState };
+
+// --- INIT ---
+// Run on load to restore the UI if data exists
+window.addEventListener('DOMContentLoaded', () => {
+    restoreUI();
+    generateSOAP();
+    renderSuperbill();
+});
+
+function saveState() {
+    localStorage.setItem('mfr_session_state', JSON.stringify(state));
+    console.log("State Saved");
+}
+
+function restoreUI() {
+    // Restore Mode
+    setMode(state.mode);
+
+    // Restore Muscles Visuals
+    // Clear all first
+    document.querySelectorAll('.muscle-zone').forEach(el => {
+        el.classList.remove('pain', 'treated', 'selected');
+    });
+
+    // Re-apply Pain (Red)
+    state.painMuscles.forEach(name => {
+        const el = document.querySelector(`.muscle-zone[data-name="${name}"]`);
+        if(el) el.classList.add('pain');
+    });
+
+    // Re-apply Treated (Green)
+    state.treatedMuscles.forEach(name => {
+        const el = document.querySelector(`.muscle-zone[data-name="${name}"]`);
+        if(el) el.classList.add('treated');
+    });
+}
+
+// --- NEW SESSION (RESET) ---
+document.getElementById('btn-reset').addEventListener('click', () => {
+    if(confirm("Start a new patient session? This will clear current data.")) {
+        state = { ...defaultState }; // Reset state object
+        state.painMuscles = []; // Ensure arrays are empty
+        state.treatedMuscles = [];
+        
+        saveState(); // Clear storage
+        restoreUI(); // Clear visuals
+        generateSOAP(); // Clear text
+        renderSuperbill(); // Clear table
+        
+        // Reset Inputs
+        document.getElementById('form-container').innerHTML = '<p class="instruction">Select a body part to begin.</p>';
+    }
+});
+
 // --- MODE SWITCHING ---
 function setMode(newMode) {
     state.mode = newMode;
+    saveState(); // Save preference
     
     // Update UI Buttons
     document.getElementById('btn-mode-assess').classList.toggle('active', newMode === 'assessment');
@@ -35,8 +92,8 @@ function switchView(viewName) {
     }
 }
 
-// --- TAB SWITCHING (Output Panel) ---
-function switchTab(tabName) {
+// --- TAB SWITCHING ---
+window.switchTab = function(tabName) { // Made global for HTML access
     const soapView = document.getElementById('soap-preview');
     const billView = document.getElementById('superbill-view');
     const tabSoap = document.getElementById('tab-soap');
@@ -52,19 +109,16 @@ function switchTab(tabName) {
         billView.classList.remove('hidden');
         tabSoap.classList.remove('active');
         tabBill.classList.add('active');
-        renderSuperbill(); // Generate table on switch
+        renderSuperbill(); 
     }
 }
-
 
 // --- INTERACTION LOGIC ---
 document.querySelectorAll('.muscle-zone').forEach(zone => {
     zone.addEventListener('click', function() {
         const muscleName = this.getAttribute('data-name');
         
-        // Logic based on current mode
         if (state.mode === 'assessment') {
-            // Toggle Pain List
             if (state.painMuscles.includes(muscleName)) {
                 state.painMuscles = state.painMuscles.filter(m => m !== muscleName);
                 this.classList.remove('pain');
@@ -73,7 +127,6 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
                 this.classList.add('pain');
             }
         } else {
-            // Toggle Treatment List
             if (state.treatedMuscles.includes(muscleName)) {
                 state.treatedMuscles = state.treatedMuscles.filter(m => m !== muscleName);
                 this.classList.remove('treated');
@@ -83,11 +136,12 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
             }
         }
 
-        // If a muscle is BOTH painful and treated, ensure 'treated' class stays (Green wins visually)
+        // Green wins visually
         if (state.treatedMuscles.includes(muscleName)) {
             this.classList.add('treated');
         }
 
+        saveState(); // <--- CRITICAL: Save after every click
         updateInputPanel(muscleName);
         generateSOAP();
         if(!document.getElementById('superbill-view').classList.contains('hidden')) {
@@ -96,12 +150,10 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
     });
 });
 
-
 // --- UI UPDATES ---
 function updateInputPanel(lastClickedMuscle) {
     const container = document.getElementById('form-container');
     
-    // Determine status of this muscle
     let statusText = "";
     if (state.painMuscles.includes(lastClickedMuscle)) statusText += "🔴 Reported Pain. ";
     if (state.treatedMuscles.includes(lastClickedMuscle)) statusText += "🟢 Treated.";
@@ -133,7 +185,6 @@ function generateSOAP() {
     const technique = techniqueElem ? techniqueElem.value : "Myofascial Release";
     const response = responseElem ? responseElem.value : "Tolerated well";
 
-    // Build Lists
     const painList = state.painMuscles.length > 0 ? state.painMuscles.join(", ") : "None reported";
     const treatedList = state.treatedMuscles.length > 0 ? state.treatedMuscles.join(", ") : "None";
 
@@ -161,35 +212,28 @@ Continue plan of care focusing on ${painList} to restore mobility.`;
 // --- SUPERBILL RENDERER ---
 function renderSuperbill() {
     const tbody = document.querySelector('#billing-table tbody');
-    tbody.innerHTML = ""; // Clear existing
+    if (!tbody) return; 
+    tbody.innerHTML = ""; 
 
     if (state.treatedMuscles.length === 0) {
         tbody.innerHTML = "<tr><td colspan='3'>No treatment areas selected.</td></tr>";
         return;
     }
 
-    // Create one row per treated muscle (or group them, but listing is clearer for PoC)
     state.treatedMuscles.forEach(muscle => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>97140</td>
-            <td>Manual Therapy</td>
-            <td>${muscle}</td>
-        `;
+        tr.innerHTML = `<td>97140</td><td>Manual Therapy</td><td>${muscle}</td>`;
         tbody.appendChild(tr);
     });
 }
 
 // Copy Button Logic
 document.getElementById('btn-copy').addEventListener('click', () => {
-    // Check which tab is active to decide what to copy
     const soapActive = !document.getElementById('soap-preview').classList.contains('hidden');
-    
     if (soapActive) {
         const noteContent = document.getElementById('soap-preview').value;
         navigator.clipboard.writeText(noteContent).then(() => alert("SOAP Note Copied!"));
     } else {
-        // Copy Table Data (Simple CSV format)
         let csv = "CPT, Description, Area\n";
         state.treatedMuscles.forEach(m => csv += `97140, Manual Therapy, ${m}\n`);
         navigator.clipboard.writeText(csv).then(() => alert("Billing Data Copied as CSV!"));
