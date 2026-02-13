@@ -11,7 +11,9 @@
 
     <div class="container">
         <section id="body-map-panel">
-            <h2>1. Select Area</h2>
+            <div class="panel-header">
+                <h2>1. Select Area</h2>
+            </div>
             
             <div class="mode-controls">
                 <button id="btn-mode-assess" class="mode-btn" onclick="setMode('assessment')">Assessment (Red)</button>
@@ -22,7 +24,8 @@
                 <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" id="body-svg">
                     
                     <g id="view-front" fill="#bdc3c7" stroke="#ffffff" stroke-width="2">
-                        <circle cx="200" cy="50" r="30" fill="#ecf0f1" stroke="none" />
+                        <circle cx="200" cy="50" r="30" class="muscle-zone" id="head-front" data-name="Head/Scalp" />
+                        
                         <rect x="185" y="80" width="30" height="20" class="muscle-zone" id="neck-front" data-name="Cervical (Ant)" />
                         <path d="M150,100 L250,100 L230,180 L170,180 Z" class="muscle-zone" id="pecs" data-name="Pectorals" />
                         <rect x="170" y="180" width="60" height="100" class="muscle-zone" id="abs" data-name="Abdominals" />
@@ -39,7 +42,8 @@
                     </g>
 
                     <g id="view-back" class="hidden" fill="#bdc3c7" stroke="#ffffff" stroke-width="2">
-                        <circle cx="200" cy="50" r="30" fill="#ecf0f1" stroke="none" />
+                        <circle cx="200" cy="50" r="30" class="muscle-zone" id="head-back" data-name="Head/Occiput" />
+
                         <path d="M170,80 L230,80 L250,110 L150,110 Z" class="muscle-zone" id="traps" data-name="Upper Trapezius" />
                         <path d="M150,110 L250,110 L230,220 L170,220 Z" class="muscle-zone" id="lats" data-name="Latissimus Dorsi" />
                         <rect x="190" y="110" width="20" height="170" class="muscle-zone" id="spine" data-name="Paraspinals" />
@@ -92,8 +96,9 @@
 
             <div class="action-buttons">
                 <button id="btn-settings" class="secondary-btn" style="background-color: #7f8c8d;">⚙️</button>
+                <button id="btn-pdf" class="secondary-btn">📄 PDF</button>
                 <button id="btn-reset" class="secondary-btn" style="background-color: #c0392b;">New Session</button>
-                <button id="btn-copy" class="primary-btn">Copy to Clipboard</button>
+                <button id="btn-copy" class="primary-btn">Copy Text</button>
             </div>
         </section>
     </div>
