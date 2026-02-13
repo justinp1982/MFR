@@ -11,9 +11,11 @@
 
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content">
-            <span id="btn-close-modal" class="close-modal">&times;</span>
-            <h2>⚙️ Therapist Voice Settings</h2>
-            <p>Customize your default phrases.</p>
+            <div class="modal-header">
+                <h2>⚙️ Settings</h2>
+                <button class="close-btn" id="btn-close-settings">&times;</button>
+            </div>
+            <p>Customize your default text.</p>
             
             <label>Subjective Intro:</label>
             <input type="text" id="set-sub" class="setting-input">
@@ -31,22 +33,23 @@
     </div>
 
     <div class="container">
+        
         <header class="app-header">
             <h1>MFR Doc Tool</h1>
-            <button id="btn-settings" class="icon-btn">⚙️</button>
+            <button id="btn-open-settings" class="icon-btn">⚙️</button>
         </header>
 
         <section id="body-map-panel">
-            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="panel-header">
                 <h2>1. Body Map</h2>
                 <div class="mode-controls">
-                    <button id="btn-mode-assess" class="mode-btn" onclick="setMode('assessment')">Pain (Red)</button>
-                    <button id="btn-mode-treat" class="mode-btn active" onclick="setMode('treatment')">Treat (Grn)</button>
+                    <button id="btn-mode-assess" class="mode-btn">Assess (Red)</button>
+                    <button id="btn-mode-treat" class="mode-btn active">Treat (Green)</button>
                 </div>
             </div>
 
             <div id="svg-container">
-                <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" id="body-svg">
+                <svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" id="body-svg" preserveAspectRatio="xMidYMid meet">
                     <g id="view-front">
                         <circle cx="200" cy="50" r="30" fill="#ecf0f1" />
                         <rect x="185" y="80" width="30" height="20" class="muscle-zone" id="neck-front" data-name="Cervical (Ant)" />
@@ -82,8 +85,8 @@
             </div>
 
             <div class="view-controls">
-                <button onclick="switchView('front')" id="btn-front" class="active-view">Front</button>
-                <button onclick="switchView('back')" id="btn-back">Back</button>
+                <button id="btn-view-front" class="active-view">Front</button>
+                <button id="btn-view-back">Back</button>
             </div>
         </section>
 
@@ -97,8 +100,8 @@
         <section id="output-panel">
             <h2>3. Export</h2>
             <div class="output-tabs">
-                <button id="tab-soap" class="tab active" onclick="switchTab('soap')">SOAP</button>
-                <button id="tab-bill" class="tab" onclick="switchTab('bill')">Bill</button>
+                <button id="tab-soap" class="tab active">SOAP</button>
+                <button id="tab-bill" class="tab">Bill</button>
             </div>
             
             <textarea id="soap-preview" readonly placeholder="Notes will auto-generate here..."></textarea>
@@ -118,12 +121,4 @@
             <div class="action-buttons grid-btns">
                 <button id="btn-copy" class="primary-btn">📋 Copy</button>
                 <button id="btn-pdf" class="secondary-btn">📄 PDF</button>
-                <button id="btn-csv" class="secondary-btn" onclick="exportCSV()">📊 CSV</button>
-                <button id="btn-reset" class="danger-btn">🔄 Reset</button>
-            </div>
-        </section>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+                <button id="btn-csv"
