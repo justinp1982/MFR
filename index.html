@@ -5,49 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MFR Rapid Documentation</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
+    </head>
 <body>
 
-    <div id="settings-modal" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>⚙️ Settings</h2>
-                <button id="btn-close-settings" class="close-btn">&times;</button>
-            </div>
-            <p>Customize your "Therapist Voice"</p>
-            
-            <label>Intro Phrase:</label>
-            <input type="text" id="set-sub" class="setting-input">
-            
-            <label>Positive Response:</label>
-            <input type="text" id="set-pos" class="setting-input">
-            
-            <label>Pain Identifier:</label>
-            <input type="text" id="set-pain" class="setting-input">
-
-            <div class="modal-actions">
-                <button id="btn-save-settings" class="primary-btn">Save Preferences</button>
-            </div>
-        </div>
-    </div>
+    <div id="auth-modal" style="display:none;"></div>
 
     <div class="container">
-        
-        <header class="app-header">
-            <h1>MFR Doc Tool</h1>
-            <button id="btn-open-settings" class="icon-btn">⚙️</button>
-        </header>
-
         <section id="body-map-panel">
-            <div class="panel-header">
-                <h2>1. Body Map</h2>
-                <div class="mode-controls">
-                    <button id="btn-mode-assess" class="mode-btn">Assess (Red)</button>
-                    <button id="btn-mode-treat" class="mode-btn active">Treat (Green)</button>
-                </div>
-            </div>
+            <h2>1. Select Area</h2>
             
+            <div class="mode-controls">
+                <button id="btn-mode-assess" class="mode-btn" onclick="setMode('assessment')">Assessment (Pain)</button>
+                <button id="btn-mode-treat" class="mode-btn active" onclick="setMode('treatment')">Treatment (Green)</button>
+            </div>
+
             <div id="svg-container">
                 <svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" id="body-svg">
                     <g id="view-front">
@@ -85,13 +56,13 @@
             </div>
 
             <div class="view-controls">
-                <button id="btn-view-front" class="active-view">Front View</button>
-                <button id="btn-view-back">Back View</button>
+                <button onclick="switchView('front')">Front View</button>
+                <button onclick="switchView('back')">Back View</button>
             </div>
         </section>
 
         <section id="input-panel">
-            <h2>2. Details</h2>
+            <h2>2. Treatment Details</h2>
             <div id="form-container">
                 <p class="instruction">Select a body part to begin.</p>
             </div>
@@ -100,8 +71,8 @@
         <section id="output-panel">
             <h2>3. Output</h2>
             <div class="output-tabs">
-                <button id="tab-soap" class="tab active">SOAP Note</button>
-                <button id="tab-bill" class="tab">Superbill</button>
+                <button id="tab-soap" class="tab active" onclick="switchTab('soap')">SOAP Note</button>
+                <button id="tab-bill" class="tab" onclick="switchTab('bill')">Superbill Data</button>
             </div>
             
             <textarea id="soap-preview" readonly placeholder="Notes will auto-generate here..."></textarea>
@@ -115,15 +86,14 @@
                             <th>Area</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                        </tbody>
                 </table>
             </div>
 
-            <div class="action-buttons grid-btns">
-                <button id="btn-copy" class="primary-btn">Copy Text</button>
-                <button id="btn-pdf" class="secondary-btn">📄 PDF</button>
-                <button id="btn-csv" class="secondary-btn">📊 CSV</button>
-                <button id="btn-reset" class="danger-btn">New Session</button>
+            <div class="action-buttons">
+                <button id="btn-reset" class="secondary-btn" style="background-color: #c0392b;">New Session</button>
+                <button id="btn-copy" class="primary-btn">Copy to Clipboard</button>
             </div>
         </section>
     </div>
