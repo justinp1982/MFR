@@ -18,7 +18,7 @@ body {
 
 .container {
     display: grid;
-    grid-template-columns: 1fr 1.2fr 1fr; /* Left, Middle, Right proportions */
+    grid-template-columns: 1fr 1.2fr 1fr;
     gap: 20px;
     width: 95%;
     height: 90vh;
@@ -35,15 +35,16 @@ section {
 
 h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 10px;}
 
-/* SVG Placeholder */
+/* SVG Container */
 #svg-container {
     flex-grow: 1;
-    background: #eee;
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
     margin-bottom: 10px;
+    border: 1px solid #eee;
 }
 
 /* Output Area */
@@ -55,7 +56,7 @@ h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px
     resize: none;
     font-family: monospace;
     padding: 10px;
-    box-sizing: border-box; /* Important for padding */
+    box-sizing: border-box;
 }
 
 .action-buttons {
@@ -74,6 +75,7 @@ button {
 
 .primary-btn { background-color: var(--accent); color: white; flex-grow: 1;}
 .secondary-btn { background-color: var(--primary); color: white; }
+.view-controls { display: flex; gap: 10px; justify-content: center; }
 
 /* --- SVG Interactive Styles --- */
 
@@ -89,7 +91,7 @@ button {
 /* Hover Effect */
 .muscle-zone:hover {
     fill: #95a5a6;
-    transform: scale(1.01); /* Subtle pop */
+    transform: scale(1.01); 
 }
 
 /* Selected State (The "Treated" Look - Green) */
@@ -98,12 +100,7 @@ button {
     stroke: #27ae60;
 }
 
-/* Pain State (Right Click - Optional for later) */
-.muscle-zone.pain {
-    fill: #e74c3c;      /* Red */
-}
-
-/* View Toggling */
+/* Hidden View Logic */
 .hidden {
     display: none;
 }
