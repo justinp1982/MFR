@@ -74,3 +74,36 @@ button {
 
 .primary-btn { background-color: var(--accent); color: white; flex-grow: 1;}
 .secondary-btn { background-color: var(--primary); color: white; }
+
+/* --- SVG Interactive Styles --- */
+
+/* The Muscle/Zone Groups */
+.muscle-zone {
+    fill: #bdc3c7;      /* Default Grey */
+    stroke: #ffffff;    /* White borders */
+    stroke-width: 2px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+/* Hover Effect */
+.muscle-zone:hover {
+    fill: #95a5a6;
+    transform: scale(1.01); /* Subtle pop */
+}
+
+/* Selected State (The "Treated" Look - Green) */
+.muscle-zone.selected {
+    fill: #2ecc71;      /* Green */
+    stroke: #27ae60;
+}
+
+/* Pain State (Right Click - Optional for later) */
+.muscle-zone.pain {
+    fill: #e74c3c;      /* Red */
+}
+
+/* View Toggling */
+.hidden {
+    display: none;
+}
