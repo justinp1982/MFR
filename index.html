@@ -96,4 +96,79 @@
                         <circle cx="187" cy="470" r="12" class="muscle-zone" id="ankle-br" data-name="R Ankle (Post)" />
                         <path d="M180,480 C170,490 170,510 185,515 L200,515 C205,510 205,490 195,480 Z" class="muscle-zone" id="foot-br" data-name="R Foot (Plantar)" />
 
-                        <path d="M220,290 C230,310 225,350 215,360 C205,350 200,310
+                        <path d="M220,290 C230,310 225,350 215,360 C205,350 200,310 200,290 Z" class="muscle-zone" id="thigh-bl" data-name="L Upper Leg (Post)" />
+                        <circle cx="213" cy="375" r="16" class="muscle-zone" id="knee-bl" data-name="L Knee (Post)" />
+                        <path d="M223,390 C225,410 220,450 213,460 C205,450 200,410 203,390 Z" class="muscle-zone" id="shin-bl" data-name="L Calf" />
+                        <circle cx="213" cy="470" r="12" class="muscle-zone" id="ankle-bl" data-name="L Ankle (Post)" />
+                        <path d="M220,480 C230,490 230,510 215,515 L200,515 C195,510 195,490 205,480 Z" class="muscle-zone" id="foot-bl" data-name="L Foot (Plantar)" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="view-controls">
+                <button onclick="switchView('front')">Front View</button>
+                <button onclick="switchView('back')">Back View</button>
+            </div>
+        </section>
+
+        <section id="input-panel">
+            <h2>2. Treatment Details</h2>
+            <div id="form-container">
+                <p class="instruction">Select a body part to begin.</p>
+            </div>
+        </section>
+
+        <section id="output-panel">
+            <h2>3. Output</h2>
+            <div class="output-tabs">
+                <button id="tab-soap" class="tab active" onclick="switchTab('soap')">SOAP Note</button>
+                <button id="tab-bill" class="tab" onclick="switchTab('bill')">Superbill Data</button>
+            </div>
+            
+            <textarea id="soap-preview" readonly placeholder="Notes will auto-generate here..."></textarea>
+            
+            <div id="superbill-view" class="hidden">
+                <table id="billing-table">
+                    <thead>
+                        <tr>
+                            <th>CPT Code</th>
+                            <th>Description</th>
+                            <th>Area</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons">
+                <button id="btn-settings" class="secondary-btn" style="background-color: #7f8c8d;">⚙️</button>
+                <button id="btn-pdf" class="secondary-btn">📄 PDF</button>
+                <button id="btn-reset" class="secondary-btn" style="background-color: #c0392b;">New Session</button>
+                <button id="btn-copy" class="primary-btn">Copy Text</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Therapist Voice</h2>
+                <span class="close-modal" onclick="toggleSettings()">&times;</span>
+            </div>
+            <p>Customize your default notes.</p>
+            
+            <label>Subjective Intro:</label>
+            <input type="text" id="set-sub" class="setting-input">
+            
+            <label>Pain Identifier:</label>
+            <input type="text" id="set-pain" class="setting-input">
+
+            <div class="modal-actions">
+                <button onclick="saveSettings()" class="primary-btn">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
