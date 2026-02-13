@@ -11,7 +11,7 @@
 
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content">
-            <span class="close-modal" onclick="toggleSettings()">&times;</span>
+            <span id="btn-close-modal" class="close-modal">&times;</span>
             <h2>⚙️ Therapist Voice Settings</h2>
             <p>Customize your default phrases.</p>
             
@@ -25,7 +25,7 @@
             <input type="text" id="set-pain" class="setting-input">
 
             <div class="modal-actions">
-                <button onclick="saveSettings()" class="primary-btn">Save Preferences</button>
+                <button id="btn-save-settings" class="primary-btn">Save Preferences</button>
             </div>
         </div>
     </div>
@@ -33,11 +33,11 @@
     <div class="container">
         <header class="app-header">
             <h1>MFR Doc Tool</h1>
-            <button onclick="toggleSettings()" class="icon-btn">⚙️</button>
+            <button id="btn-settings" class="icon-btn">⚙️</button>
         </header>
 
         <section id="body-map-panel">
-            <div class="panel-header">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
                 <h2>1. Body Map</h2>
                 <div class="mode-controls">
                     <button id="btn-mode-assess" class="mode-btn" onclick="setMode('assessment')">Pain (Red)</button>
@@ -46,7 +46,7 @@
             </div>
 
             <div id="svg-container">
-                <svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" id="body-svg">
+                <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" id="body-svg">
                     <g id="view-front">
                         <circle cx="200" cy="50" r="30" fill="#ecf0f1" />
                         <rect x="185" y="80" width="30" height="20" class="muscle-zone" id="neck-front" data-name="Cervical (Ant)" />
@@ -117,7 +117,7 @@
 
             <div class="action-buttons grid-btns">
                 <button id="btn-copy" class="primary-btn">📋 Copy</button>
-                <button id="btn-pdf" class="secondary-btn" onclick="generatePDF()">📄 PDF</button>
+                <button id="btn-pdf" class="secondary-btn">📄 PDF</button>
                 <button id="btn-csv" class="secondary-btn" onclick="exportCSV()">📊 CSV</button>
                 <button id="btn-reset" class="danger-btn">🔄 Reset</button>
             </div>
