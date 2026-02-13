@@ -1,4 +1,4 @@
-console.log("MFR Tool Loaded.");
+console.log("MFR Tool Loaded (v1.6 Buttons).");
 
 // [FUTURE-SECURITY] User Auth Placeholder
 const currentUser = { id: "local-user-001", plan: "pro" };
@@ -8,6 +8,8 @@ const defaultState = {
     mode: 'treatment', 
     painMuscles: [],
     treatedMuscles: [],
+    technique: "Myofascial Release", // New Global Default
+    response: "Tolerated well",      // New Global Default
     notes: ""
 };
 
@@ -23,14 +25,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function saveState() {
     localStorage.setItem('mfr_session_state', JSON.stringify(state));
-    console.log("State Saved");
 }
 
 function restoreUI() {
     setMode(state.mode);
-    // Clear
+    // Clear Visuals
     document.querySelectorAll('.muscle-zone').forEach(el => el.classList.remove('pain', 'treated'));
-    // Restore
+    // Restore Visuals
     state.painMuscles.forEach(name => {
         const el = document.querySelector(`.muscle-zone[data-name="${name}"]`);
         if(el) el.classList.add('pain');
@@ -45,8 +46,10 @@ function restoreUI() {
 document.getElementById('btn-reset').addEventListener('click', () => {
     if(confirm("Start a new patient session? This will clear current data.")) {
         state = { ...defaultState };
+        // Explicit reset of arrays
         state.painMuscles = [];
         state.treatedMuscles = [];
+        
         saveState();
         restoreUI();
         generateSOAP();
@@ -129,38 +132,56 @@ document.querySelectorAll('.muscle-zone').forEach(zone => {
     });
 });
 
+// --- DYNAMIC INPUT PANEL (Now with Buttons) ---
 function updateInputPanel(lastClickedMuscle) {
     const container = document.getElementById('form-container');
+    
+    // Status Logic
     let statusText = "";
     if (state.painMuscles.includes(lastClickedMuscle)) statusText += "🔴 Reported Pain. ";
     if (state.treatedMuscles.includes(lastClickedMuscle)) statusText += "🟢 Treated.";
 
+    // Options Arrays
+    const techniques = ["Myofascial Release", "Trigger Point", "Soft Tissue Mob"];
+    const responses = ["Tolerated well", "Decreased Pain", "Improved ROM"];
+
+    // Helper to create button group HTML
+    const createButtons = (items, currentVal, type) => {
+        return items.map(item => {
+            const isActive = item === currentVal ? 'active' : '';
+            return `<button class="chip-btn ${isActive}" onclick="setGlobalOption('${type}', '${item}', '${lastClickedMuscle}')">${item}</button>`;
+        }).join('');
+    };
+
     container.innerHTML = `
         <h3>Selected: ${lastClickedMuscle}</h3>
-        <p><strong>Status:</strong> ${statusText || "Normal"}</p>
-        <hr>
-        <label>Technique (Global):</label>
-        <select id="technique-select" onchange="generateSOAP()" style="width: 100%; padding: 8px; margin-bottom: 10px;">
-            <option>Myofascial Release</option>
-            <option>Trigger Point Release</option>
-            <option>Soft Tissue Mobilization</option>
-        </select>
+        <p style="font-size:0.9rem; margin-bottom:15px;"><strong>Status:</strong> ${statusText || "Normal"}</p>
+        <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
         
-        <label>Patient Response (Global):</label>
-        <select id="response-select" onchange="generateSOAP()" style="width: 100%; padding: 8px; margin-bottom: 10px;">
-            <option>Tolerated well</option>
-            <option>Reported decreased pain</option>
-            <option>Improved ROM</option>
-        </select>
+        <h4>Technique</h4>
+        <div class="chip-group">
+            ${createButtons(techniques, state.technique, 'technique')}
+        </div>
+        
+        <h4>Patient Response</h4>
+        <div class="chip-group">
+            ${createButtons(responses, state.response, 'response')}
+        </div>
     `;
 }
 
-function generateSOAP() {
-    const techniqueElem = document.getElementById('technique-select');
-    const responseElem = document.getElementById('response-select');
-    const technique = techniqueElem ? techniqueElem.value : "Myofascial Release";
-    const response = responseElem ? responseElem.value : "Tolerated well";
+// --- NEW FUNCTION: Handle Button Clicks ---
+window.setGlobalOption = function(type, value, muscleContext) {
+    // Update State
+    if (type === 'technique') state.technique = value;
+    if (type === 'response') state.response = value;
+    
+    saveState();
+    updateInputPanel(muscleContext); // Re-render buttons to show active state
+    generateSOAP(); // Update Text
+};
 
+function generateSOAP() {
     const painList = state.painMuscles.length > 0 ? state.painMuscles.join(", ") : "None reported";
     const treatedList = state.treatedMuscles.length > 0 ? state.treatedMuscles.join(", ") : "None";
 
@@ -174,10 +195,10 @@ Areas of pain/restriction identified: ${painList}.
 OBJECTIVE:
 Manual therapy (CPT 97140) performed.
 Treated Areas: ${treatedList}.
-Techniques: ${technique} to address fascial restrictions.
+Techniques: ${state.technique} to address fascial restrictions.
 
 ASSESSMENT:
-Patient ${response} to treatment. Palpable release of tension noted.
+Patient response: ${state.response}. Palpable release of tension noted.
 
 PLAN:
 Continue plan of care focusing on ${painList} to restore mobility.`;
