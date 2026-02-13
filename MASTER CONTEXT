@@ -28,3 +28,37 @@ Core Philosophy: Speed over flash. "The Middle Ground" approach.
 - [NEXT] Implement local storage to save "Defaults" (e.g., favorite phrases).
 - [NEXT] Refine the "Pain" vs "Treatment" click logic (Left vs Right click?).
 - [NEXT] Begin PDF generation logic.
+
+
+====================================================================
+PROJECT CONTEXT & STATE - v1.3
+Date: February 12, 2026
+Team: Jim (AI) & Partner (Human)
+====================================================================
+
+1. PROJECT OVERVIEW
+Goal: Create a frictionless, sub-second session documentation tool for an Occupational Therapist specializing in Myofascial Release (MFR).
+Output: SOAP-formatted notes optimized for CPT 97140 (Manual Therapy) billing.
+Core Philosophy: Speed over flash. "The Middle Ground" approach.
+
+2. ARCHITECTURE & TECH STACK
+- Front-End: HTML, CSS, Vanilla JavaScript.
+- Visuals: Hand-coded "Low-Poly" SVG Mannequin (Zone-based interaction).
+- Data Engine: 
+  - State Management: Dual-Array System (Pain vs. Treated).
+  - Persistence: LocalStorage (Auto-save on every click).
+  - Output: Realtime SOAP text generation + Tabular Billing Data.
+- Future State (SaaS): Multi-tenant architecture with user authentication.
+
+3. CURRENT PROGRESS
+- [COMPLETED] "Middle Ground" SVG Map (Front/Back views).
+- [COMPLETED] Logic Engine: Pain Mode (Red) vs. Treatment Mode (Green).
+- [COMPLETED] Billing Integration: dedicated "Superbill Data" tab with CPT codes.
+- [COMPLETED] Persistence: Session data survives page refreshes.
+- [COMPLETED] Workflow: "New Session" reset functionality.
+
+4. PENDING DECISIONS / NEXT STEPS
+- [NEXT] PDF Generation: Implementing `pdf-lib` to write data onto a CMS-1500 form.
+- [NEXT] Customization: Allow users to edit the default text phrases (e.g., "Tolerated well").
+- [NEXT] Mobile Polish: Verify touch target sizes on actual phone screens.
+====================================================================
