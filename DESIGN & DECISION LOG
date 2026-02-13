@@ -22,3 +22,37 @@ Layer 2 (PDF): We will use an "Overlay" method. Instead of drawing a PDF from sc
 C. Future-Proofing for SaaS
 
 The Decision: While this is currently a local Proof of Concept (PoC), we are coding with "Slots" for a future backend. We are using a state-management object (state = {}) that acts as a single source of truth, making it easy to eventually swap localStorage for a cloud database like Supabase or Firebase.
+
+
+2. ENGINEERING & DESIGN MANUAL (Draft)
+Use this content to build the eventual "User Guide" or "Technical Spec" for the project.
+
+1. The Visual Interface: "Zone Theory"
+Design Decision: We deliberately chose a "Geometric Zone Map" over detailed medical anatomy.
+
+Why: Real-world sessions move fast. A therapist cannot waste seconds zooming into a high-res image to find a specific muscle fiber.
+
+Function: The body is divided into interactive polygons (e.g., "Upper Traps", "Pecs"). These serve as buttons, not just illustrations. This ensures the app loads instantly on poor clinic Wi-Fi and scales perfectly to any device size.
+
+2. The Logic Engine: Dual-State Tracking
+Problem: A therapist needs to differentiate between Assessment (where does it hurt?) and Treatment (what did we fix?).
+
+Solution: We implemented a "Mode Switch" system.
+
+Assessment Mode (Red): Marks areas of reported pain or restriction.
+
+Treatment Mode (Green): Marks areas where manual therapy was applied.
+
+Conflict Resolution: If an area is both painful AND treated, the system prioritizes the Green (Treated) visual, but internally records both facts. This allows the SOAP note to accurately say: "Patient reported pain in Traps... Manual Therapy performed on Traps."
+
+3. Data Persistence (The "Safety Net")
+Problem: Web browsers are volatile. A stray swipe or refresh could delete a patient's entire chart.
+
+Solution: We utilize the browser's localStorage API.
+
+How it Works: Every single click (muscle selection or mode change) triggers an instant save to the device's hard drive. If the browser crashes or reloads, the session state is restored immediately.
+
+The Reset: To prevent data bleeding between patients, a dedicated "New Session" button wipes this storage and resets the UI.
+
+4. Future-Proofing (SaaS Readiness)
+Architecture: The code is built with "SaaS Hooks." We use a centralized currentUser object and specific [FUTURE-SECURITY] placeholders. This means when we are ready to turn this into a paid product with logins, we simply swap the local storage logic for a cloud database connection (like Supabase or Firebase) without rewriting the core interface.
