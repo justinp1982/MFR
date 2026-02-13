@@ -1,38 +1,6 @@
 ====================================================================
-PROJECT CONTEXT & STATE - v1.2
-Date: February 12, 2026
-Team: Jim (AI) & Partner (Human)
-====================================================================
-
-1. PROJECT OVERVIEW
-Goal: Create a frictionless, sub-second session documentation tool for an Occupational Therapist specializing in Myofascial Release (MFR).
-Output: SOAP-formatted notes optimized for CPT 97140 (Manual Therapy) billing.
-Core Philosophy: Speed over flash. "The Middle Ground" approach.
-
-2. ARCHITECTURE & TECH STACK
-- Front-End: HTML, CSS, Vanilla JavaScript.
-- Visuals: Hand-coded "Low-Poly" SVG Mannequin (Zone-based interaction).
-- Data Engine: Hybrid approach.
-  - "Click-to-Copy" for legacy billing systems.
-  - PDF Overlay (via pdf-lib) for generating official CMS-1500/Superbills.
-- Future State (SaaS): Multi-tenant architecture with user authentication.
-
-3. CURRENT PROGRESS
-- [COMPLETED] Defined "Middle Ground" strategy (Zones vs. Anatomy).
-- [COMPLETED] Created basic HTML/CSS Skeleton (3-Column Layout).
-- [COMPLETED] Implemented Interactive SVG Mannequin (Front/Back views).
-- [COMPLETED] Built basic Logic Engine (Click muscle -> Generate Text).
-- [COMPLETED] Added "Future-Proofing" placeholders for Auth/Security.
-
-4. PENDING DECISIONS / NEXT STEPS
-- [NEXT] Implement local storage to save "Defaults" (e.g., favorite phrases).
-- [NEXT] Refine the "Pain" vs "Treatment" click logic (Left vs Right click?).
-- [NEXT] Begin PDF generation logic.
-
-
-====================================================================
-PROJECT CONTEXT & STATE - v1.3
-Date: February 12, 2026
+PROJECT CONTEXT & STATE - v1.3 (Golden Master)
+Date: February 13, 2026
 Team: Jim (AI) & Partner (Human)
 ====================================================================
 
@@ -48,17 +16,21 @@ Core Philosophy: Speed over flash. "The Middle Ground" approach.
   - State Management: Dual-Array System (Pain vs. Treated).
   - Persistence: LocalStorage (Auto-save on every click).
   - Output: Realtime SOAP text generation + Tabular Billing Data.
-- Future State (SaaS): Multi-tenant architecture with user authentication.
 
-3. CURRENT PROGRESS
+3. CURRENT PROGRESS (v1.3 STABLE)
 - [COMPLETED] "Middle Ground" SVG Map (Front/Back views).
 - [COMPLETED] Logic Engine: Pain Mode (Red) vs. Treatment Mode (Green).
-- [COMPLETED] Billing Integration: dedicated "Superbill Data" tab with CPT codes.
+- [COMPLETED] Billing Integration: "Superbill Data" tab with CPT codes.
 - [COMPLETED] Persistence: Session data survives page refreshes.
 - [COMPLETED] Workflow: "New Session" reset functionality.
 
-4. PENDING DECISIONS / NEXT STEPS
-- [NEXT] PDF Generation: Implementing `pdf-lib` to write data onto a CMS-1500 form.
-- [NEXT] Customization: Allow users to edit the default text phrases (e.g., "Tolerated well").
-- [NEXT] Mobile Polish: Verify touch target sizes on actual phone screens.
+4. RECENT HISTORY & STRATEGY
+- We attempted a jump to v1.4 (Mobile/PDF/Settings) but encountered stability issues.
+- We ROLLED BACK to v1.3 to establish a stable baseline.
+- CURRENT STRATEGY: Implement v1.4 features one by one, starting with Mobile Ergonomics, then Settings, then PDF.
+
+5. NEXT STEPS
+- [IMMEDIATE] Mobile Polish: Add CSS Media Queries for phone layout.
+- [PENDING] Customization: Settings modal for therapist phrases.
+- [PENDING] PDF Generation: Client-side using `jspdf`.
 ====================================================================
