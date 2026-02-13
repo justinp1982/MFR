@@ -25,160 +25,52 @@
                     
                     <g id="view-front" fill="#bdc3c7" stroke="#ffffff" stroke-width="2">
                         
-                        <path d="M170,50 Q200,10 230,50" class="muscle-zone" id="scalp-f" data-name="Scalp (Front)" />
-                        <path d="M170,50 L170,75 Q200,90 230,75 L230,50" class="muscle-zone" id="face" data-name="Face/Sinus" fill="#dcdde1"/>
-                        <circle cx="185" cy="55" r="5" class="muscle-zone" id="eye-r" data-name="R Eye" fill="#fff" stroke="#999" />
-                        <circle cx="215" cy="55" r="5" class="muscle-zone" id="eye-l" data-name="L Eye" fill="#fff" stroke="#999" />
-                        <rect x="160" y="45" width="10" height="20" class="muscle-zone" id="ear-r" data-name="R Ear" rx="5" />
-                        <rect x="230" y="45" width="10" height="20" class="muscle-zone" id="ear-l" data-name="L Ear" rx="5" />
-                        <path d="M175,75 Q200,95 225,75 L225,85 Q200,105 175,85 Z" class="muscle-zone" id="jaw" data-name="Jaw/TMJ" />
+                        <path d="M170,50 C170,20 230,20 230,50 C230,70 215,85 200,90 C185,85 170,70 170,50 Z" class="muscle-zone" id="scalp-f" data-name="Scalp/Face" />
+                        <path d="M175,55 C175,45 225,45 225,55 C225,75 200,85 200,85 C200,85 175,75 175,55 Z" class="muscle-zone" id="face" data-name="Face/Sinus" fill="#dcdde1" stroke="none"/>
+                        <circle cx="188" cy="60" r="4" class="muscle-zone" id="eye-r" data-name="R Eye" fill="#fff" stroke="#999" />
+                        <circle cx="212" cy="60" r="4" class="muscle-zone" id="eye-l" data-name="L Eye" fill="#fff" stroke="#999" />
+                        <ellipse cx="165" cy="55" rx="6" ry="12" class="muscle-zone" id="ear-r" data-name="R Ear" />
+                        <ellipse cx="235" cy="55" rx="6" ry="12" class="muscle-zone" id="ear-l" data-name="L Ear" />
+                        <path d="M185,75 Q200,85 215,75 Q215,82 200,88 Q185,82 185,75 Z" class="muscle-zone" id="jaw" data-name="Jaw/TMJ" />
 
-                        <rect x="180" y="90" width="40" height="20" class="muscle-zone" id="cervical-f" data-name="Cervical (Ant)" />
-                        <rect x="160" y="115" width="80" height="60" class="muscle-zone" id="thoracic-f" data-name="Thoracic/Chest" />
-                        <rect x="165" y="180" width="70" height="50" class="muscle-zone" id="lumbar-f" data-name="Lumbar/Abdomen" />
-                        <path d="M165,235 L235,235 L220,270 L180,270 Z" class="muscle-zone" id="pelvis-f" data-name="Pelvis/Hips" />
+                        <path d="M185,88 C185,88 180,110 175,115 L225,115 C220,110 215,88 215,88 Z" class="muscle-zone" id="cervical-f" data-name="Cervical (Ant)" />
+                        <path d="M160,115 C150,130 155,170 170,180 L230,180 C245,170 250,130 240,115 L215,115 L185,115 Z" class="muscle-zone" id="thoracic-f" data-name="Thoracic/Chest" />
+                        <path d="M170,180 C165,200 165,220 170,235 L230,235 C235,220 235,200 230,180 Z" class="muscle-zone" id="lumbar-f" data-name="Lumbar/Abdomen" />
+                        <path d="M170,235 C160,250 175,275 200,280 C225,275 240,250 230,235 Z" class="muscle-zone" id="pelvis-f" data-name="Pelvis/Hips" />
 
-                        <circle cx="140" cy="120" r="18" class="muscle-zone" id="shldr-r" data-name="R Shoulder" />
-                        <rect x="125" y="140" width="30" height="50" class="muscle-zone" id="uparm-r" data-name="R Upper Arm" rx="5" />
-                        <circle cx="140" cy="200" r="12" class="muscle-zone" id="elbow-r" data-name="R Elbow" />
-                        <rect x="130" y="215" width="20" height="50" class="muscle-zone" id="forearm-r" data-name="R Forearm" rx="5" />
-                        <rect x="130" y="270" width="20" height="10" class="muscle-zone" id="wrist-r" data-name="R Wrist" />
-                        <rect x="125" y="285" width="30" height="25" class="muscle-zone" id="hand-r" data-name="R Hand" rx="5" />
-                        <path d="M125,315 L125,330 L130,330 L130,315 Z" class="muscle-zone" id="fing-r1" data-name="R Fingers" />
-                        <path d="M132,315 L132,335 L137,335 L137,315 Z" class="muscle-zone" id="fing-r2" data-name="R Fingers" />
-                        <path d="M140,315 L140,335 L145,335 L145,315 Z" class="muscle-zone" id="fing-r3" data-name="R Fingers" />
-                        <path d="M148,315 L148,330 L153,330 L153,315 Z" class="muscle-zone" id="fing-r4" data-name="R Fingers" />
+                        <circle cx="145" cy="125" r="18" class="muscle-zone" id="shldr-r" data-name="R Shoulder" />
+                        <rect x="130" y="140" width="30" height="60" rx="15" ry="15" class="muscle-zone" id="uparm-r" data-name="R Upper Arm" />
+                        <circle cx="145" cy="210" r="14" class="muscle-zone" id="elbow-r" data-name="R Elbow" />
+                        <rect x="135" y="220" width="22" height="55" rx="10" ry="10" class="muscle-zone" id="forearm-r" data-name="R Forearm" />
+                        <circle cx="146" cy="285" r="10" class="muscle-zone" id="wrist-r" data-name="R Wrist" />
+                        <path d="M135,295 C125,300 125,330 135,335 C145,340 155,335 158,320 C160,310 155,300 145,295 Z" class="muscle-zone" id="hand-r" data-name="R Hand/Fingers" />
 
-                        <circle cx="260" cy="120" r="18" class="muscle-zone" id="shldr-l" data-name="L Shoulder" />
-                        <rect x="245" y="140" width="30" height="50" class="muscle-zone" id="uparm-l" data-name="L Upper Arm" rx="5" />
-                        <circle cx="260" cy="200" r="12" class="muscle-zone" id="elbow-l" data-name="L Elbow" />
-                        <rect x="250" y="215" width="20" height="50" class="muscle-zone" id="forearm-l" data-name="L Forearm" rx="5" />
-                        <rect x="250" y="270" width="20" height="10" class="muscle-zone" id="wrist-l" data-name="L Wrist" />
-                        <rect x="245" y="285" width="30" height="25" class="muscle-zone" id="hand-l" data-name="L Hand" rx="5" />
-                        <path d="M245,315 L245,330 L250,330 L250,315 Z" class="muscle-zone" id="fing-l1" data-name="L Fingers" />
-                        <path d="M252,315 L252,335 L257,335 L257,315 Z" class="muscle-zone" id="fing-l2" data-name="L Fingers" />
-                        <path d="M260,315 L260,335 L265,335 L265,315 Z" class="muscle-zone" id="fing-l3" data-name="L Fingers" />
-                        <path d="M268,315 L268,330 L273,330 L273,315 Z" class="muscle-zone" id="fing-l4" data-name="L Fingers" />
+                        <circle cx="255" cy="125" r="18" class="muscle-zone" id="shldr-l" data-name="L Shoulder" />
+                        <rect x="240" y="140" width="30" height="60" rx="15" ry="15" class="muscle-zone" id="uparm-l" data-name="L Upper Arm" />
+                        <circle cx="255" cy="210" r="14" class="muscle-zone" id="elbow-l" data-name="L Elbow" />
+                        <rect x="243" y="220" width="22" height="55" rx="10" ry="10" class="muscle-zone" id="forearm-l" data-name="L Forearm" />
+                        <circle cx="254" cy="285" r="10" class="muscle-zone" id="wrist-l" data-name="L Wrist" />
+                        <path d="M265,295 C275,300 275,330 265,335 C255,340 245,335 242,320 C240,310 245,300 255,295 Z" class="muscle-zone" id="hand-l" data-name="L Hand/Fingers" />
 
-                        <rect x="170" y="275" width="28" height="70" class="muscle-zone" id="thigh-r" data-name="R Upper Leg" rx="5" />
-                        <circle cx="184" cy="355" r="14" class="muscle-zone" id="knee-r" data-name="R Knee" />
-                        <rect x="174" y="375" width="20" height="70" class="muscle-zone" id="shin-r" data-name="R Lower Leg" rx="5" />
-                        <rect x="174" y="450" width="20" height="10" class="muscle-zone" id="ankle-r" data-name="R Ankle" />
-                        <path d="M170,465 L198,465 L194,485 L174,485 Z" class="muscle-zone" id="foot-r" data-name="R Foot" />
-                        <path d="M172,490 L196,490 L196,500 L172,500 Z" class="muscle-zone" id="toes-r" data-name="R Toes" />
+                        <path d="M175,275 C165,300 170,340 180,350 C190,340 195,300 190,275 Z" class="muscle-zone" id="thigh-r" data-name="R Upper Leg" />
+                        <circle cx="182" cy="365" r="16" class="muscle-zone" id="knee-r" data-name="R Knee" />
+                        <path d="M172,380 C170,400 175,440 182,450 C190,440 195,400 192,380 Z" class="muscle-zone" id="shin-r" data-name="R Lower Leg" />
+                        <circle cx="182" cy="460" r="12" class="muscle-zone" id="ankle-r" data-name="R Ankle" />
+                        <path d="M175,470 C165,480 165,500 180,505 L195,505 C200,500 200,480 190,470 Z" class="muscle-zone" id="foot-r" data-name="R Foot/Toes" />
 
-                        <rect x="202" y="275" width="28" height="70" class="muscle-zone" id="thigh-l" data-name="L Upper Leg" rx="5" />
-                        <circle cx="216" cy="355" r="14" class="muscle-zone" id="knee-l" data-name="L Knee" />
-                        <rect x="206" y="375" width="20" height="70" class="muscle-zone" id="shin-l" data-name="L Lower Leg" rx="5" />
-                        <rect x="206" y="450" width="20" height="10" class="muscle-zone" id="ankle-l" data-name="L Ankle" />
-                        <path d="M202,465 L230,465 L226,485 L206,485 Z" class="muscle-zone" id="foot-l" data-name="L Foot" />
-                        <path d="M204,490 L228,490 L228,500 L204,500 Z" class="muscle-zone" id="toes-l" data-name="L Toes" />
+                        <path d="M225,275 C235,300 230,340 220,350 C210,340 205,300 210,275 Z" class="muscle-zone" id="thigh-l" data-name="L Upper Leg" />
+                        <circle cx="218" cy="365" r="16" class="muscle-zone" id="knee-l" data-name="L Knee" />
+                        <path d="M228,380 C230,400 225,440 218,450 C210,440 205,400 208,380 Z" class="muscle-zone" id="shin-l" data-name="L Lower Leg" />
+                        <circle cx="218" cy="460" r="12" class="muscle-zone" id="ankle-l" data-name="L Ankle" />
+                        <path d="M225,470 C235,480 235,500 220,505 L205,505 C200,500 200,480 210,470 Z" class="muscle-zone" id="foot-l" data-name="L Foot/Toes" />
                     </g>
 
                     <g id="view-back" class="hidden" fill="#bdc3c7" stroke="#ffffff" stroke-width="2">
                         
-                        <circle cx="200" cy="50" r="30" class="muscle-zone" id="scalp-b" data-name="Scalp/Occiput" />
-                        <rect x="160" y="45" width="10" height="20" class="muscle-zone" id="ear-br" data-name="R Ear" rx="5" />
-                        <rect x="230" y="45" width="10" height="20" class="muscle-zone" id="ear-bl" data-name="L Ear" rx="5" />
+                        <path d="M170,50 C170,20 230,20 230,50 C230,85 200,95 170,85 C170,85 170,50 170,50 Z" class="muscle-zone" id="scalp-b" data-name="Scalp/Occiput" />
+                        <ellipse cx="165" cy="55" rx="6" ry="12" class="muscle-zone" id="ear-br" data-name="R Ear" />
+                        <ellipse cx="235" cy="55" rx="6" ry="12" class="muscle-zone" id="ear-bl" data-name="L Ear" />
 
-                        <rect x="180" y="85" width="40" height="25" class="muscle-zone" id="cervical-b" data-name="Cervical (Post)" />
-                        <rect x="160" y="115" width="80" height="60" class="muscle-zone" id="thoracic-b" data-name="Thoracic (Post)" />
-                        <rect x="170" y="180" width="60" height="50" class="muscle-zone" id="lumbar-b" data-name="Lumbar (Post)" />
-                        <path d="M165,235 L235,235 L220,270 L180,270 Z" class="muscle-zone" id="pelvis-b" data-name="Sacrum/Glutes" />
-
-                        <circle cx="140" cy="120" r="18" class="muscle-zone" id="shldr-br" data-name="R Shoulder" />
-                        <rect x="125" y="140" width="30" height="50" class="muscle-zone" id="uparm-br" data-name="R Upper Arm" rx="5" />
-                        <circle cx="140" cy="200" r="12" class="muscle-zone" id="elbow-br" data-name="R Elbow" />
-                        <rect x="130" y="215" width="20" height="50" class="muscle-zone" id="forearm-br" data-name="R Forearm" rx="5" />
-                        <rect x="130" y="270" width="20" height="10" class="muscle-zone" id="wrist-br" data-name="R Wrist" />
-                        <rect x="125" y="285" width="30" height="25" class="muscle-zone" id="hand-br" data-name="R Hand" rx="5" />
-                        
-                        <circle cx="260" cy="120" r="18" class="muscle-zone" id="shldr-bl" data-name="L Shoulder" />
-                        <rect x="245" y="140" width="30" height="50" class="muscle-zone" id="uparm-bl" data-name="L Upper Arm" rx="5" />
-                        <circle cx="260" cy="200" r="12" class="muscle-zone" id="elbow-bl" data-name="L Elbow" />
-                        <rect x="250" y="215" width="20" height="50" class="muscle-zone" id="forearm-bl" data-name="L Forearm" rx="5" />
-                        <rect x="250" y="270" width="20" height="10" class="muscle-zone" id="wrist-bl" data-name="L Wrist" />
-                        <rect x="245" y="285" width="30" height="25" class="muscle-zone" id="hand-bl" data-name="L Hand" rx="5" />
-
-                        <rect x="170" y="275" width="28" height="70" class="muscle-zone" id="thigh-br" data-name="R Upper Leg" rx="5" />
-                        <circle cx="184" cy="355" r="14" class="muscle-zone" id="knee-br" data-name="R Knee" />
-                        <rect x="174" y="375" width="20" height="70" class="muscle-zone" id="shin-br" data-name="R Lower Leg" rx="5" />
-                        <rect x="174" y="450" width="20" height="10" class="muscle-zone" id="ankle-br" data-name="R Ankle" />
-                        <path d="M174,465 L194,465 L194,495 L174,495 Z" class="muscle-zone" id="foot-br" data-name="R Foot" />
-
-                        <rect x="202" y="275" width="28" height="70" class="muscle-zone" id="thigh-bl" data-name="L Upper Leg" rx="5" />
-                        <circle cx="216" cy="355" r="14" class="muscle-zone" id="knee-bl" data-name="L Knee" />
-                        <rect x="206" y="375" width="20" height="70" class="muscle-zone" id="shin-bl" data-name="L Lower Leg" rx="5" />
-                        <rect x="206" y="450" width="20" height="10" class="muscle-zone" id="ankle-bl" data-name="L Ankle" />
-                        <path d="M206,465 L226,465 L226,495 L206,495 Z" class="muscle-zone" id="foot-bl" data-name="L Foot" />
-                    </g>
-                </svg>
-            </div>
-
-            <div class="view-controls">
-                <button onclick="switchView('front')">Front View</button>
-                <button onclick="switchView('back')">Back View</button>
-            </div>
-        </section>
-
-        <section id="input-panel">
-            <h2>2. Treatment Details</h2>
-            <div id="form-container">
-                <p class="instruction">Select a body part to begin.</p>
-            </div>
-        </section>
-
-        <section id="output-panel">
-            <h2>3. Output</h2>
-            <div class="output-tabs">
-                <button id="tab-soap" class="tab active" onclick="switchTab('soap')">SOAP Note</button>
-                <button id="tab-bill" class="tab" onclick="switchTab('bill')">Superbill Data</button>
-            </div>
-            
-            <textarea id="soap-preview" readonly placeholder="Notes will auto-generate here..."></textarea>
-            
-            <div id="superbill-view" class="hidden">
-                <table id="billing-table">
-                    <thead>
-                        <tr>
-                            <th>CPT Code</th>
-                            <th>Description</th>
-                            <th>Area</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-            <div class="action-buttons">
-                <button id="btn-settings" class="secondary-btn" style="background-color: #7f8c8d;">⚙️</button>
-                <button id="btn-pdf" class="secondary-btn">📄 PDF</button>
-                <button id="btn-reset" class="secondary-btn" style="background-color: #c0392b;">New Session</button>
-                <button id="btn-copy" class="primary-btn">Copy Text</button>
-            </div>
-        </section>
-    </div>
-
-    <div id="settings-modal" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>⚙️ Therapist Voice</h2>
-                <span class="close-modal" onclick="toggleSettings()">&times;</span>
-            </div>
-            <p>Customize your default notes.</p>
-            
-            <label>Subjective Intro:</label>
-            <input type="text" id="set-sub" class="setting-input">
-            
-            <label>Pain Identifier:</label>
-            <input type="text" id="set-pain" class="setting-input">
-
-            <div class="modal-actions">
-                <button onclick="saveSettings()" class="primary-btn">Save Preferences</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+                        <path d="M185,85 C180,95 175,115 170,120 L230,120 C225,115 220,95 215,85 Z" class="muscle-zone" id="cervical-b" data-name="Cervical (Post)" />
+                        <path d="M160,120 C150,140 155,175 170,190 L230,190 C245,175 250,140 240,120 Z" class="muscle-zone" id="thoracic-b" data-name="Thoracic (Post)" />
+                        <path d="M170,190 C165,210 170,230 175,240 L225,240 C230,230 235,210 230,190 Z" class="muscle-zone" id="lumbar-b" data-name="Lumbar (Post)" />
