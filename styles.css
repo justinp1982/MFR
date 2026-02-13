@@ -117,3 +117,46 @@ button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; 
     button, .mode-btn, .tab { padding: 15px; font-size: 1rem; } 
     .muscle-zone { stroke-width: 4px; }
 }
+
+
+/* --- V1.6: Chip Buttons for Inputs --- */
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.chip-btn {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 20px; /* Pill shape */
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #555;
+    flex-grow: 1; /* Stretch to fill space */
+    text-align: center;
+}
+
+.chip-btn:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+}
+
+.chip-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+h4 {
+    margin: 10px 0 5px 0;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
