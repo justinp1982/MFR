@@ -91,10 +91,31 @@
             </div>
 
             <div class="action-buttons">
+                <button id="btn-settings" class="secondary-btn" style="background-color: #7f8c8d;">⚙️</button>
                 <button id="btn-reset" class="secondary-btn" style="background-color: #c0392b;">New Session</button>
                 <button id="btn-copy" class="primary-btn">Copy to Clipboard</button>
             </div>
         </section>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Therapist Voice</h2>
+                <span class="close-modal" onclick="toggleSettings()">&times;</span>
+            </div>
+            <p>Customize your default notes.</p>
+            
+            <label>Subjective Intro:</label>
+            <input type="text" id="set-sub" class="setting-input">
+            
+            <label>Pain Identifier:</label>
+            <input type="text" id="set-pain" class="setting-input">
+
+            <div class="modal-actions">
+                <button onclick="saveSettings()" class="primary-btn">Save Preferences</button>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>
