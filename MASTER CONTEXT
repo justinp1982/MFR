@@ -135,3 +135,54 @@ Team: Jim (AI) & Partner (Human)
 - Field Test: Therapist uses it for 1 day in the clinic.
 - Feedback Loop: Does "Global Settings" cover 90% of cases?
 ====================================================================
+
+====================================================================
+PROJECT CONTEXT: MFR RAPID DOCUMENTATION TOOL
+Version: 2.2 (The "Humanoid" Golden Master)
+Date: February 13, 2026
+Team: Jim (AI) & Partner
+Status: SHIPPED / PoC COMPLETE
+====================================================================
+
+1. THE MISSION
+Create a frictionless, client-side documentation tool for Manual Therapists 
+that generates CPT 97140 billing data and SOAP notes in under 30 seconds.
+
+2. FINAL TECH STACK
+- Core: HTML5, CSS3, Vanilla JavaScript (ES6+).
+- Libraries: jsPDF (v2.5.1 via CDN) for client-side PDF generation.
+- Data Storage: LocalStorage (Browser-based persistence).
+- Hosting: Ready for GitHub Pages (Static Site).
+
+3. KEY FEATURES DELIVERED
+A. The Visual Interface
+   - Custom SVG Mannequin: Organic, "Humanoid" zones (V2.1).
+   - Granularity: Digits, Joints (Shoulder/Knee/Ankle), Spine Regions.
+   - Dual-State Logic: Red (Pain) vs. Green (Treated).
+
+B. The "Engine"
+   - Chip Buttons: Single-tap selection for Technique & Response.
+   - Smart Text: Auto-generates SOAP narrative based on selections.
+   - PDF Generator: Creates a dual-purpose "Superbill + Chart Note" PDF.
+   - CSV Export: For raw data backup.
+
+C. User Experience
+   - Mobile Stack: Auto-detects phones and adjusts layout for thumbs.
+   - Therapist Voice: Settings modal to customize default phrases.
+   - Safety Net: Auto-saves on every click; "New Session" resets.
+
+4. FILE MANIFEST (V2.2)
+- index.html: Contains the V2.1 Organic SVG and V1.9 Logic wiring.
+- styles.css: Contains the Chip styling, Mobile Media Queries, and Layout.
+- app.js: Contains the PDF logic, State Management, and Settings logic.
+
+5. FUTURE ROADMAP (V3.0 - The SaaS Pivot)
+- [BACKLOG] User Authentication (Supabase/Firebase).
+- [BACKLOG] Cloud Database (Sync across devices).
+- [BACKLOG] Multi-Patient Management (Save/Load specific profiles).
+- [BACKLOG] Dark Mode.
+
+6. KNOWN CONSTRAINTS
+- "Global Settings": Technique/Response applies to the whole session (Speed tradeoff).
+- Browser Dependency: Clearing browser cache wipes the "Therapist Voice" settings.
+====================================================================
