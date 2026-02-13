@@ -56,3 +56,24 @@ The Reset: To prevent data bleeding between patients, a dedicated "New Session" 
 
 4. Future-Proofing (SaaS Readiness)
 Architecture: The code is built with "SaaS Hooks." We use a centralized currentUser object and specific [FUTURE-SECURITY] placeholders. This means when we are ready to turn this into a paid product with logins, we simply swap the local storage logic for a cloud database connection (like Supabase or Firebase) without rewriting the core interface.
+
+2. ENGINEERING & DESIGN MANUAL
+The "Why" behind the build.
+
+1. The Visual Interface: "Zone Theory"
+Design: We use a "Geometric Zone Map" (SVG polygons) rather than medical anatomy.
+
+Function: Zones act as buttons. This ensures instant loading and perfect scaling.
+
+2. The Logic Engine: Dual-State Tracking
+Assessment Mode (Red): Marks areas of reported pain/restriction.
+
+Treatment Mode (Green): Marks areas where manual therapy was applied.
+
+Conflict Resolution: If an area is both painful AND treated, the system prioritizes the Green (Treated) visual, but internally records both facts.
+
+3. Data Persistence
+Mechanism: We use localStorage. Every click triggers a save.
+
+Reset: A "New Session" button wipes storage and resets the UI to prevent patient data overlap.
+
