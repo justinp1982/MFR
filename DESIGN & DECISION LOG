@@ -1,0 +1,24 @@
+2. DESIGN & DECISION LOG (The "User Manual" Source)
+Why we built it this way.
+
+A. The "Middle Ground" Visual Strategy
+
+The Problem: Detailed anatomical maps are too slow to load and too small to click on mobile. Text-only inputs are boring and require too much reading.
+
+The Solution: We utilized a "Geometric Zone" approach. We represent muscle groups as simple polygons (trapezoids, ovals) rather than medical illustrations.
+
+Why: This renders instantly, scales perfectly on any screen size, and is easier for the brain to scan quickly. It functions as a dashboard control, not an anatomy lesson.
+
+B. The Hybrid Output Engine
+
+The Problem: The therapist needs two very different things: raw text to paste into existing software, and a formatted PDF for direct insurance submission.
+
+The Solution: We separated the display from the data.
+
+Layer 1 (Text): A realtime string builder that constructs sentences based on selected zones.
+
+Layer 2 (PDF): We will use an "Overlay" method. Instead of drawing a PDF from scratch, we will load a blank CMS-1500 template and programmatically "type" over it. This ensures perfect alignment with strict insurance forms.
+
+C. Future-Proofing for SaaS
+
+The Decision: While this is currently a local Proof of Concept (PoC), we are coding with "Slots" for a future backend. We are using a state-management object (state = {}) that acts as a single source of truth, making it easy to eventually swap localStorage for a cloud database like Supabase or Firebase.
