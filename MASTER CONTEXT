@@ -34,3 +34,37 @@ Core Philosophy: Speed over flash. "The Middle Ground" approach.
 - [PENDING] Customization: Settings modal for therapist phrases.
 - [PENDING] PDF Generation: Client-side using `jspdf`.
 ====================================================================
+
+
+====================================================================
+PROJECT CONTEXT & STATE - v1.9 (PoC Complete)
+Date: February 13, 2026
+Team: Jim (AI) & Partner (Human)
+====================================================================
+
+1. PROJECT STATUS: READY FOR TESTING
+- The "Fast Model" Proof of Concept is feature-complete.
+- It is a standalone, client-side web application (HTML/CSS/JS).
+- No server or database is required for this phase.
+
+2. KEY FEATURES DELIVERED
+- Visual Interface: "Zone-Based" SVG Mannequin (Front/Back).
+- Logic: Dual-State Tracking (Red = Pain, Green = Treated).
+- Input: "Chip" buttons for rapid selection of Technique/Response.
+- Output Engine: 
+  - Real-time SOAP Text generation.
+  - Automated PDF "Superbill/Record" generation (Client-side).
+  - CSV Data Export.
+- Persistence: Auto-saves to LocalStorage; "New Session" resets.
+- Customization: "Therapist Voice" settings modal.
+
+3. ARCHITECTURE DECISIONS
+- Chosen "Global Settings" for Technique/Response (Speed over Granularity).
+- Chosen "Client-Side PDF" (jspdf) to ensure privacy and offline capability.
+- Chosen "Mobile Stack" CSS to allow use on phones/tablets.
+
+4. NEXT STEPS (Post-PoC)
+- Deploy to GitHub Pages.
+- Field Test: Therapist uses it for 1 day in the clinic.
+- Feedback Loop: Does "Global Settings" cover 90% of cases?
+====================================================================
