@@ -9,4 +9,18 @@ PDF Strategy: Do we need to output data to be imported into another system (CSV/
 
 Local Persistence: If the user refreshes the page right now, they lose their notes. We should implement localStorage immediately in the next session to prevent data loss during accidental refreshes.
 
-Ready when you are, partner.
+
+. POINTS TO PONDER (For Next Session)
+The PDF Challenge:
+
+Generating a PDF is heavier than text. We need to decide: Do we generate it in the browser (Client-Side) or send data to a server (Server-Side)?
+
+Jim's Recommendation: Client-side using pdf-lib. It keeps patient data on their device (privacy-friendly) and costs us $0 in server fees.
+
+Customization:
+
+Therapists have their own "voice." Currently, the phrases "Tolerated well" and "Palpable release" are hardcoded. We should consider a "Settings" panel where they can save their own preferred phrases.
+
+Mobile Ergonomics:
+
+Now that the logic works, we need to see how it feels on a phone. The "Front/Back" buttons might be too small for a thumb. We might need to move them to a bottom navigation bar.
