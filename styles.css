@@ -13,7 +13,7 @@ body {
     background-color: var(--bg-color);
     margin: 0;
     height: 100vh;
-    overflow: hidden; /* Desktop: prevents scroll bars */
+    overflow: hidden; 
 }
 
 /* Header placeholder (hidden on desktop) */
@@ -39,18 +39,13 @@ section {
     overflow-y: auto; 
 }
 
-h2 { 
-    font-size: 1.1rem; 
-    color: var(--primary); 
-    margin-top: 0; 
-    border-bottom: 2px solid var(--border); 
-    padding-bottom: 8px;
-    margin-bottom: 10px;
-}
+h2 { font-size: 1.1rem; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 10px; }
 
-/* --- SVG Container (Fixed Whitespace) --- */
+/* --- SVG Container (SIZING FIX) --- */
 #svg-container {
-    flex-grow: 1;
+    /* Instead of growing forever, we cap the height */
+    height: 50vh;          /* Takes up 50% of the viewport height */
+    min-height: 300px;     /* Minimum safety size */
     background: #ffffff;
     display: flex;
     align-items: center;
@@ -58,14 +53,13 @@ h2 {
     border-radius: 4px;
     margin-bottom: 10px;
     border: 1px solid #eee;
-    overflow: hidden; /* Keeps the SVG inside the box */
 }
 
-/* Force SVG to fill the container */
+/* SVG itself: Fit inside the container */
 svg {
-    width: 100%;
-    height: 100%;
-    display: block; /* Removes inline whitespace */
+    max-height: 100%;
+    width: auto;           /* Let width adjust to maintain aspect ratio */
+    display: block; 
 }
 
 /* Controls */
@@ -78,11 +72,11 @@ svg {
 .view-controls { display: flex; gap: 10px; justify-content: center; flex-shrink: 0; }
 .view-controls button { flex: 1; padding: 10px; cursor: pointer; }
 
-/* Muscles */
-.muscle-zone { fill: #bdc3c7; stroke: #ffffff; stroke-width: 2px; transition: all 0.2s ease; cursor: pointer; }
-.muscle-zone:hover { fill: #95a5a6; transform: scale(1.01); }
-.muscle-zone.pain { fill: var(--pain); }
-.muscle-zone.treated { fill: var(--treated); stroke: #27ae60; }
+/* Muscles (IMPORTANT overrides for color safety) */
+.muscle-zone { transition: all 0.2s ease; cursor: pointer; }
+.muscle-zone:hover { fill: #95a5a6 !important; transform: scale(1.01); }
+.muscle-zone.pain { fill: var(--pain) !important; }
+.muscle-zone.treated { fill: var(--treated) !important; stroke: #27ae60 !important; }
 
 /* Output & Inputs */
 .output-tabs { display: flex; gap: 5px; margin-bottom: 10px; flex-shrink: 0; }
@@ -100,17 +94,10 @@ button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; 
 .secondary-btn { background-color: var(--primary); color: white; }
 .hidden { display: none !important; }
 
-/* --- MOBILE ERGONOMICS (The Jim Special) --- */
+/* --- MOBILE ERGONOMICS --- */
 @media (max-width: 768px) {
-    /* 1. Un-freeze the body height so we can scroll */
-    body { 
-        height: auto; 
-        overflow-y: auto; 
-        padding: 10px; 
-        display: block; 
-    }
+    body { height: auto; overflow-y: auto; padding: 10px; display: block; }
     
-    /* 2. Stack the columns */
     .container {
         display: flex;
         flex-direction: column; 
@@ -120,24 +107,19 @@ button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; 
         margin: 0;
     }
 
-    /* 3. Re-order: Map first, Inputs second, Output last */
-    /* Fixed height ensures SVG has room to render without crushing buttons */
     #body-map-panel { 
         order: 1; 
-        height: 60vh; 
-        min-height: 400px; 
+        /* Mobile: Let it be a bit taller for fingers, but not huge */
+        height: auto; 
     }
     
+    #svg-container {
+        height: 50vh; /* Keep the half-screen constraint on mobile too */
+    }
+
     #input-panel { order: 2; }
     #output-panel { order: 3; }
 
-    /* 4. Fat Finger Targets */
-    button, .mode-btn, .tab { 
-        padding: 15px; 
-        font-size: 1rem; 
-    } 
-    
-    .muscle-zone { 
-        stroke-width: 4px; /* Thicker lines for easier visibility */
-    }
+    button, .mode-btn, .tab { padding: 15px; font-size: 1rem; } 
+    .muscle-zone { stroke-width: 4px; }
 }
