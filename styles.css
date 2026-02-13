@@ -1,129 +1,271 @@
-:root {
-    --bg-color: #f4f4f9;
-    --panel-bg: #ffffff;
-    --primary: #2c3e50;
-    --accent: #3498db;
-    --pain: #e74c3c;       /* Red */
-    --treated: #2ecc71;    /* Green */
-    --border: #e0e0e0;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("MFR Tool: Ready.");
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--bg-color);
-    margin: 0;
-    height: 100vh;
-    overflow: hidden; /* Desktop: prevent body scroll */
-}
+    // --- DEFAULTS ---
+    const defaultSettings = {
+        intro: "Patient presents for manual therapy session.",
+        positive: "Tolerated well",
+        pain: "Areas of pain/restriction identified:",
+    };
 
-/* Header (Hidden on Desktop) */
-.app-header { display: none; }
+    const defaultState = {
+        mode: 'treatment', 
+        painMuscles: [],
+        treatedMuscles: [],
+        notes: ""
+    };
 
-.container {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr 1fr;
-    gap: 20px;
-    width: 95%;
-    height: 90vh;
-    margin: 20px auto;
-}
+    // --- LOAD DATA ---
+    let state = JSON.parse(localStorage.getItem('mfr_session_state')) || { ...defaultState };
+    let settings = JSON.parse(localStorage.getItem('mfr_settings')) || { ...defaultSettings };
 
-section {
-    background: var(--panel-bg);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto; /* Internal scroll */
-}
+    // --- DOM ELEMENTS ---
+    const soapPreview = document.getElementById('soap-preview');
+    const superbillView = document.getElementById('superbill-view');
+    const svgFront = document.getElementById('view-front');
+    const svgBack = document.getElementById('view-back');
 
-h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 10px;}
+    // --- INIT ---
+    restoreUI();
+    generateSOAP();
+    renderSuperbill();
 
-/* Panel Headers */
-.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.mode-controls { display: flex; gap: 5px; }
-.mode-btn { font-size: 0.8rem; padding: 5px 10px; opacity: 0.6; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: white;}
-.mode-btn.active { opacity: 1; font-weight: bold; border: 2px solid #333; color: white; }
-#btn-mode-assess.active { background-color: var(--pain); border-color: #c0392b; }
-#btn-mode-treat.active { background-color: var(--treated); border-color: #27ae60; }
+    // ===========================
+    // EVENT LISTENERS
+    // ===========================
 
-#svg-container {
-    flex-grow: 1;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    border: 1px solid #eee;
-    min-height: 300px;
-}
-svg { width: 100%; height: 100%; }
+    // 1. Muscle Clicks
+    document.querySelectorAll('.muscle-zone').forEach(zone => {
+        zone.addEventListener('click', function() {
+            handleMuscleClick(this.getAttribute('data-name'));
+        });
+    });
 
-/* Muscles */
-.muscle-zone { fill: #bdc3c7; stroke: #fff; stroke-width: 2px; transition: all 0.2s; cursor: pointer; }
-.muscle-zone:hover { fill: #95a5a6; transform: scale(1.01); }
-.muscle-zone.pain { fill: var(--pain); }
-.muscle-zone.treated { fill: var(--treated); stroke: #27ae60; }
+    // 2. Mode & View Toggles
+    document.getElementById('btn-mode-assess').addEventListener('click', () => setMode('assessment'));
+    document.getElementById('btn-mode-treat').addEventListener('click', () => setMode('treatment'));
+    document.getElementById('btn-view-front').addEventListener('click', () => switchView('front'));
+    document.getElementById('btn-view-back').addEventListener('click', () => switchView('back'));
 
-.view-controls { display: flex; gap: 10px; }
-.view-controls button { flex: 1; padding: 8px; cursor: pointer; }
-.active-view { background-color: var(--primary); color: white; font-weight: bold; border: none; border-radius: 4px;}
+    // 3. Output Tabs
+    document.getElementById('tab-soap').addEventListener('click', () => switchTab('soap'));
+    document.getElementById('tab-bill').addEventListener('click', () => switchTab('bill'));
 
-/* Output */
-.output-tabs { display: flex; gap: 5px; margin-bottom: 10px; }
-.tab { flex: 1; padding: 8px; border: none; cursor: pointer; background: #eee; }
-.tab.active { background: var(--primary); color: white; font-weight: bold; }
+    // 4. Settings Modal
+    document.getElementById('btn-open-settings').addEventListener('click', toggleSettings);
+    document.getElementById('btn-close-settings').addEventListener('click', toggleSettings);
+    document.getElementById('btn-save-settings').addEventListener('click', saveSettings);
 
-#soap-preview { flex-grow: 1; width: 100%; border: 1px solid var(--border); border-radius: 4px; resize: none; font-family: monospace; padding: 10px; }
+    // 5. Action Buttons
+    document.getElementById('btn-reset').addEventListener('click', resetSession);
+    document.getElementById('btn-copy').addEventListener('click', copyToClipboard);
+    document.getElementById('btn-csv').addEventListener('click', exportCSV);
+    document.getElementById('btn-pdf').addEventListener('click', generatePDF);
 
-#billing-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-#billing-table th, #billing-table td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 0.9rem; }
-#billing-table th { background-color: #f2f2f2; }
 
-/* Buttons */
-.grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-button { padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
-.primary-btn { background-color: var(--accent); }
-.secondary-btn { background-color: var(--primary); }
-.danger-btn { background-color: #c0392b; }
-.icon-btn { background: none; color: #333; font-size: 1.5rem; padding: 0; }
+    // ===========================
+    // LOGIC FUNCTIONS
+    // ===========================
 
-.hidden { display: none !important; }
-
-/* Modal */
-.modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; }
-.modal-content { background: white; padding: 20px; border-radius: 8px; width: 300px; max-width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.close-btn { background: none; color: #333; font-size: 1.5rem; padding: 0; }
-.setting-input { width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-
-/* --- MOBILE ERGONOMICS (The Jim Special) --- */
-@media (max-width: 768px) {
-    body { height: auto; overflow: auto; padding: 10px; }
-    
-    .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    h1 { margin: 0; font-size: 1.5rem; color: var(--primary); }
-
-    .container {
-        display: flex;
-        flex-direction: column; /* Stack vertically */
-        height: auto;
-        gap: 15px;
-        width: 100%;
-        margin: 0;
+    function handleMuscleClick(muscleName) {
+        if (state.mode === 'assessment') {
+            toggleArray(state.painMuscles, muscleName);
+        } else {
+            toggleArray(state.treatedMuscles, muscleName);
+        }
+        
+        saveState();
+        refreshVisuals(); 
+        updateInputPanel(muscleName);
+        generateSOAP();
+        renderSuperbill();
     }
 
-    #body-map-panel {
-        height: 60vh; /* Map takes priority */
-        order: 1;
+    function toggleArray(arr, val) {
+        const idx = arr.indexOf(val);
+        if (idx > -1) arr.splice(idx, 1);
+        else arr.push(val);
     }
-    
-    #input-panel { order: 2; }
-    #output-panel { order: 3; }
 
-    /* Larger touch targets */
-    button { padding: 15px; font-size: 1rem; } 
-    .muscle-zone { stroke-width: 3px; }
-}
+    function refreshVisuals() {
+        // Clear all classes first
+        document.querySelectorAll('.muscle-zone').forEach(el => {
+            el.classList.remove('pain', 'treated');
+        });
+
+        // Apply Red (Pain)
+        state.painMuscles.forEach(m => {
+            const el = document.querySelector(`[data-name="${m}"]`);
+            if(el) el.classList.add('pain');
+        });
+
+        // Apply Green (Treated) - Overrides Pain
+        state.treatedMuscles.forEach(m => {
+            const el = document.querySelector(`[data-name="${m}"]`);
+            if(el) el.classList.add('treated');
+        });
+    }
+
+    function setMode(newMode) {
+        state.mode = newMode;
+        saveState();
+        document.getElementById('btn-mode-assess').classList.toggle('active', newMode === 'assessment');
+        document.getElementById('btn-mode-treat').classList.toggle('active', newMode === 'treatment');
+    }
+
+    function switchView(viewName) {
+        if(viewName === 'front') {
+            svgFront.classList.remove('hidden');
+            svgBack.classList.add('hidden');
+            document.getElementById('btn-view-front').classList.add('active-view');
+            document.getElementById('btn-view-back').classList.remove('active-view');
+        } else {
+            svgFront.classList.add('hidden');
+            svgBack.classList.remove('hidden');
+            document.getElementById('btn-view-front').classList.remove('active-view');
+            document.getElementById('btn-view-back').classList.add('active-view');
+        }
+    }
+
+    function switchTab(tabName) {
+        if (tabName === 'soap') {
+            soapPreview.classList.remove('hidden');
+            superbillView.classList.add('hidden');
+            document.getElementById('tab-soap').classList.add('active');
+            document.getElementById('tab-bill').classList.remove('active');
+        } else {
+            soapPreview.classList.add('hidden');
+            superbillView.classList.remove('hidden');
+            document.getElementById('tab-soap').classList.remove('active');
+            document.getElementById('tab-bill').classList.add('active');
+            renderSuperbill();
+        }
+    }
+
+    function updateInputPanel(muscle) {
+        const container = document.getElementById('form-container');
+        let status = "";
+        if (state.painMuscles.includes(muscle)) status += "🔴 Pain ";
+        if (state.treatedMuscles.includes(muscle)) status += "🟢 Treated";
+        
+        container.innerHTML = `<h3>${muscle}</h3><p>${status || "Normal"}</p>`;
+    }
+
+    function generateSOAP() {
+        const painList = state.painMuscles.length ? state.painMuscles.join(", ") : "None";
+        const treatedList = state.treatedMuscles.length ? state.treatedMuscles.join(", ") : "None";
+
+        const note = `SOAP NOTE
+DATE: ${new Date().toLocaleDateString()}
+
+S: ${settings.intro}
+${settings.pain} ${painList}.
+
+O: Manual therapy (CPT 97140).
+Treated: ${treatedList}.
+
+A: ${settings.positive}. Palpable release noted.
+
+P: Continue plan of care.`;
+
+        soapPreview.value = note;
+    }
+
+    function renderSuperbill() {
+        const tbody = document.querySelector('#billing-table tbody');
+        tbody.innerHTML = state.treatedMuscles.map(m => `<tr><td>97140</td><td>Manual Therapy</td><td>${m}</td></tr>`).join('');
+    }
+
+    // --- SETTINGS ---
+    function toggleSettings() {
+        const modal = document.getElementById('settings-modal');
+        const isHidden = modal.classList.contains('hidden');
+        
+        if (isHidden) {
+            modal.classList.remove('hidden');
+            document.getElementById('set-sub').value = settings.intro;
+            document.getElementById('set-pos').value = settings.positive;
+            document.getElementById('set-pain').value = settings.pain;
+        } else {
+            modal.classList.add('hidden');
+        }
+    }
+
+    function saveSettings() {
+        settings.intro = document.getElementById('set-sub').value;
+        settings.positive = document.getElementById('set-pos').value;
+        settings.pain = document.getElementById('set-pain').value;
+        localStorage.setItem('mfr_settings', JSON.stringify(settings));
+        toggleSettings();
+        generateSOAP();
+        alert("Settings Saved!");
+    }
+
+    // --- EXPORTS ---
+    function copyToClipboard() {
+        navigator.clipboard.writeText(soapPreview.value).then(() => alert("Copied!"));
+    }
+
+    function exportCSV() {
+        let csv = "Date,CPT,Description,Area\n";
+        state.treatedMuscles.forEach(m => {
+            csv += `${new Date().toLocaleDateString()},97140,Manual Therapy,${m}\n`;
+        });
+        
+        const link = document.createElement("a");
+        link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        link.download = "session_data.csv";
+        link.click();
+    }
+
+    async function generatePDF() {
+        if (!window.jspdf) {
+            alert("PDF Library loading...");
+            return;
+        }
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text("Manual Therapy Superbill", 20, 20);
+        
+        doc.setFontSize(12);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 30);
+        
+        doc.setLineWidth(0.5);
+        doc.line(20, 35, 190, 35); 
+
+        let y = 50;
+        doc.text("CPT Code", 20, y);
+        doc.text("Treatment Area", 60, y);
+        
+        y += 10;
+        state.treatedMuscles.forEach(muscle => {
+            doc.text("97140", 20, y);
+            doc.text(muscle, 60, y);
+            y += 10;
+        });
+
+        doc.save("Superbill.pdf");
+    }
+
+    function resetSession() {
+        if(confirm("Start new session?")) {
+            state.painMuscles = [];
+            state.treatedMuscles = [];
+            saveState();
+            refreshVisuals();
+            generateSOAP();
+            renderSuperbill();
+        }
+    }
+
+    function saveState() {
+        localStorage.setItem('mfr_session_state', JSON.stringify(state));
+    }
+
+    function restoreUI() {
+        setMode(state.mode);
+        refreshVisuals();
+    }
+});
