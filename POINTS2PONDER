@@ -1,0 +1,12 @@
+. POINTS TO PONDER (For Next Session)
+Interaction Complexity: Currently, a click means "Treated" (Green). Therapists often need to record "Pain" (Red) vs "Treated" (Green). We need to decide how to handle this in a browser.
+
+Option A: Left Click (Green), Right Click (Red). (Hard on mobile).
+
+Option B: A "Mode Toggle" switch at the top (Treatment Mode vs. Assessment Mode). (Safest for mobile).
+
+PDF Strategy: Do we need to output data to be imported into another system (CSV/JSON), or just the visual PDF? The "Superbill" requirement implies a visual PDF, but some billers prefer raw data.
+
+Local Persistence: If the user refreshes the page right now, they lose their notes. We should implement localStorage immediately in the next session to prevent data loss during accidental refreshes.
+
+Ready when you are, partner.
